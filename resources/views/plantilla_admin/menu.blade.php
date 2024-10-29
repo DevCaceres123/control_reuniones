@@ -49,16 +49,16 @@
                                             <a class="nav-link" href="{{ route('usuarios.index') }}">Usuarios</a>
                                         </li><!--end nav-item-->
                                     @endcan
-                                    
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('roles.index') }}">Roles</a>
-                                        </li><!--end nav-item-->
-                                    
-                                    
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('permisos.index') }}">Permisos</a>
-                                        </li><!--end nav-item-->
-                                    
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('roles.index') }}">Roles</a>
+                                    </li><!--end nav-item-->
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('permisos.index') }}">Permisos</a>
+                                    </li><!--end nav-item-->
+
 
                                 </ul><!--end nav-->
                             </div><!--end startbarApplications-->
@@ -72,8 +72,60 @@
                             <div class="border_left hidden-xs"></div>
                             <div class="border_right"></div>
                         </small>
-                        <span>NEGOCIO</span>
+                        <span>ACTIVIDADES</span>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reuniones" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="reuniones">
+                            <i class="iconoir-community menu-icon"></i>
+                            <span>REUNIONES</span>
+                        </a>
+                        <div class="collapse " id="reuniones">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Planificacion de
+                                        Reuniones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Control de Asistencia</a>
+                                </li>
+
+                            </ul><!--end nav-->
+                        </div><!--end startbarApplications-->
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pagos" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="pagos">
+                            <i class="fas fa-money-bill menu-icon"></i>
+                            <span>PAGOS</span>
+                        </a>
+                        <div class="collapse " id="pagos">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Cuotas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Pagar Coutas</a>
+                                </li>
+
+                            </ul><!--end nav-->
+                        </div><!--end startbarApplications-->
+                    </li>
+
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('inicio') }}" role="button" aria-expanded="false"
+                                aria-controls="sidebarDashboards">
+                                <i class="fas fa-desktop menu-icon"></i>
+                                <span>LECTORES</span>
+                            </a>
+                        </li><!--end nav-item-->
+                    
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="#sidebarElements" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarElements">
