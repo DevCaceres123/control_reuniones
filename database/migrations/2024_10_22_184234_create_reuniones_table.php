@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('titulo',20);
             $table->string('descripcion',100);
             $table->string('estado',10);
-            $table->unsignedBigInteger('id_usuario');
+            $table->time('tolerancia');
+            $table->time('anticipo');
             $table->timestamps();
         });
     }
