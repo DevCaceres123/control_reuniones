@@ -53,17 +53,19 @@ class User extends Authenticatable
         ];
     }
 
-    protected function nombres():Attribute{
+    protected function nombres(): Attribute
+    {
         return new Attribute(
             //set: fn ($value) => mb_strtoupper($value),
-            get: fn ($value) => mb_strtoupper($value),
+            get: fn($value) => mb_strtoupper($value),
         );
     }
 
-    protected function apellidos():Attribute{
+    protected function apellidos(): Attribute
+    {
         return new Attribute(
-            set: fn ($value) => mb_strtoupper($value),
-            get: fn ($value) => mb_strtoupper($value),
+            set: fn($value) => mb_strtoupper($value),
+            get: fn($value) => mb_strtoupper($value),
         );
     }
 
@@ -72,10 +74,21 @@ class User extends Authenticatable
     // Relacion eloquent
 
 
-    public function reuniones(){
+    public function reuniones()
+    {
         //return $this->belongsToMany('App\Models\Reunion');
 
-        return $this->belongsToMany('App\Models\Reunion', 'user_reunion', 'id_usuario', 'id_reunion')
-                    ->withPivot('id_lector'); // Incluimos el campo extra (id_lectores)
+        return $this->belongsToMany('App\Models\Reunion', 'user_reunion', 'user_id', 'reunion_id')
+            ->withPivot('id_lector'); // Incluimos el campo extra (id_lectores)
+    }
+
+    public function pagos()
+    {
+        return $this->belongsToMany('App\Models\Pago', 'user_pago');
+    }
+
+    public function lectores()
+    {
+        return $this->hasMany('App\Models\Lector', 'user_id'); // Si user_id es la clave en la tabla lectores
     }
 }

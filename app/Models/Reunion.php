@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Reunion extends Model
 {
     use HasFactory;
+    protected $table = 'reuniones';
     public  function users(){
        
 
-        return $this->belongsToMany('App\Models\User', 'user_reunion', 'id_reunion', 'id_usuario')
+        return $this->belongsToMany('App\Models\User', 'user_reunion', 'reunion_id', 'user_id')
         ->withPivot('id_lector'); // Incluimos el campo extra (id_lectores)
 
     }

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('user_pago', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('id_usuario');
-            $table->unsignedBigInteger('id_pago');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('pago_id');
 
-            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
 
-            $table->foreign('id_pago')->references('id')->on('pagos')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('pago_id')->references('id')->on('pagos')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }
