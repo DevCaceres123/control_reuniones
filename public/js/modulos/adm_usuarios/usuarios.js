@@ -169,9 +169,6 @@ $('#formularioUsuario').submit(function (e) {
             mensajeAlerta(response.mensaje, response.tipo);
             return;
         }
-
-
-
         listar_usuarios();
         mensajeAlerta(response.mensaje, response.tipo);
         vaciar_formulario("formularioUsuario");

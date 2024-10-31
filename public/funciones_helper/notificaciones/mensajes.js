@@ -1,14 +1,20 @@
 // Define las funciones de notificación utilizando SweetAlert
 const notificaciones = {
   'exito': (mensaje = "", titulo = "") => {
-    Swal.fire({
+    Swal.mixin({
+      toast: !0,
       position: "top-end",
-      icon: 'success',
-      title: titulo,
-      text: mensaje,
-      showConfirmButton: false,
-      timer: 1800,
-    });
+      showConfirmButton: !1,
+      timer: 1500,
+      timerProgressBar: !0,
+      didOpen: e => {
+        e.addEventListener("mouseenter", Swal.stopTimer), e.addEventListener("mouseleave", Swal
+          .resumeTimer)
+      }
+    }).fire({
+      icon: "success",
+      title: mensaje,
+    })
   },
   'error': (mensaje = "", titulo = "") => {
     Swal.fire({
@@ -37,7 +43,7 @@ const notificaciones = {
   },
   'errores': (obj) => {
 
- 
+
     for (let key in obj) {
       document.getElementById('_' + key).innerHTML = `<p class="text-danger">${obj[key]}</p>`;
     }
@@ -48,13 +54,13 @@ const notificaciones = {
 
 export function mensajeAlerta(mensaje = "", titulo = "") {
 
-    if (notificaciones.hasOwnProperty(titulo)) {
-      notificaciones[titulo](mensaje, titulo);
-    }
-  
+  if (notificaciones.hasOwnProperty(titulo)) {
+    notificaciones[titulo](mensaje, titulo);
+  }
 
 
-  
+
+
 
 }
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('descripcion',100);
             $table->string('estado',12);
             $table->string('uso',10);
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });

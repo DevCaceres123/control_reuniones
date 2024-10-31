@@ -119,7 +119,7 @@
 
                     
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('inicio') }}" role="button" aria-expanded="false"
+                            <a class="nav-link" href="{{ route('lectores.index') }}" role="button" aria-expanded="false"
                                 aria-controls="sidebarDashboards">
                                 <i class="fas fa-desktop menu-icon"></i>
                                 <span>LECTORES</span>

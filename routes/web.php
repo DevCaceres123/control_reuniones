@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Lectores\Controlador_lectores;
 use App\Http\Controllers\Pagos\Controlador_pagos;
 use App\Http\Controllers\Reuniones\Controlador_reuniones;
 use App\Http\Controllers\Usuario\Controlador_login;
@@ -60,12 +61,15 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     // PARA LOS PAGOS
     Route::controller(Controlador_pagos::class)->group(function () {
 
-        Route::resource('/reuniones', Controlador_pagos::class);
+        Route::resource('/pagos', Controlador_pagos::class);
     });
 
     // PARA LOS LECTORES
-    Route::controller(Controlador_pagos::class)->group(function () {
+    Route::controller(Controlador_lectores::class)->group(function () {
 
-        Route::resource('/reuniones', Controlador_pagos::class);
+        Route::resource('/lectores', Controlador_lectores::class);
+        Route::put('/lectores/terminar_uso/{id_lector}', 'terminar_uso');
+        Route::put('/lectores/actualizar_lector/{id_lector}', 'actualizar_lector');
+
     });
 });
