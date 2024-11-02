@@ -44,8 +44,6 @@ class Controlador_lectores extends Controller
      */
     public function store(LectorRequest $request)
     {
-
-
         DB::beginTransaction();
 
         try {

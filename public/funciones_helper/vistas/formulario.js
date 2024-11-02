@@ -10,7 +10,7 @@ export function vaciar_errores(nombre_formulario) {
     
     // Seleccionar el formulario
     const form = document.getElementById(nombre_formulario);
-    console.log(form);
+    // console.log(form);
     // Seleccionar solo los campos de tipo input, textarea y select
     const elements = form.querySelectorAll("input, textarea, select");
     const fieldNames = Array.from(elements).map(element => element.name);

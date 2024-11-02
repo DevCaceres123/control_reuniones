@@ -56,6 +56,8 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     Route::controller(Controlador_reuniones::class)->group(function () {
 
         Route::resource('/reuniones', Controlador_reuniones::class);
+        Route::get('/listar_reuniones', 'listar_reuniones');
+        Route::get('/lista_asistencia/{id_reunion}', 'lista_asistencia');
     });
 
     // PARA LOS PAGOS

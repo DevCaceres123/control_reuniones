@@ -85,7 +85,7 @@
                             <ul class="nav flex-column">
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Planificacion de
+                                    <a class="nav-link" href="{{ route('reuniones.index') }}">Planificacion de
                                         Reuniones</a>
                                 </li>
                                 <li class="nav-item">
