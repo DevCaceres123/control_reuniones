@@ -18,8 +18,6 @@ class UsuarioSeeder extends Seeder
      */
     public function run(): void
     {
-
-
         $rol1       = new Role();
         $rol1->name = 'administrador';
         $rol1->save();

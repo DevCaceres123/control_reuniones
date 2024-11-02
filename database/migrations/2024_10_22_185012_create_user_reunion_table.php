@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_reunion', function (Blueprint $table) {
             $table->id();
-            $table->date('entrada');
-            $table->date('salida');
+            $table->dateTime('entrada')->nullable();
+            $table->dateTime('salida')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('reunion_id');
            

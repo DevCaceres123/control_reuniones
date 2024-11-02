@@ -9,7 +9,8 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reunion\ReunionRequest;
 use Illuminate\Http\Request;
-use Carbon\Carbon; // Asegúrate de incluir Carbon
+use Carbon\Carbon;
+
 class Controlador_reuniones extends Controller
 {
     public $mensaje = [];
@@ -179,14 +180,19 @@ class Controlador_reuniones extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $reunion_id)
-    {
-        
-    }
+    public function show(string $reunion_id) {}
 
-    public function lista_asistencia($reunion_id){
-        $asistenciaReunion = Reunion::with('users')->where('id',$reunion_id)->get();
-        return view('administrador.reunion.listaAsistencia',compact('asistenciaReunion'));
+    public function lista_asistencia($reunion_id)
+    {
+        $asistenciaReunion = Reunion::with('users')->where('id', $reunion_id)->get();
+
+        $entradaSalidas = DB::table('user_reunion')
+        ->where('reunion_id', $reunion_id)
+        ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
+        ->get(); // Cambia first() por get()
+    
+        // $asistenciaReunion = Reunion::whereHas('users')->get();
+        return view('administrador.reunion.listaAsistencia', compact('asistenciaReunion', 'entradaSalidas'));
     }
     /**
      * Show the form for editing the specified resource.

@@ -41,8 +41,15 @@
                                                     <td>{{ $usuarios->nombres }}</td>
                                                     <td>{{ $usuarios->paterno }}</td>
                                                     <td>{{ $usuarios->materno }}</td>
-                                                    <td>{{$usuarios->entrada}}</td>
-                                                    <td>Salida</td>
+                                                    
+                                                    @foreach ($entradaSalidas as $item)
+                                                        @if ($usuarios->id == $item->user_id)
+                                                        <td>{{$item->entrada}}</td>
+                                                        <td>{{$item->salida}}</td>
+                                                        @endif
+                                                    @endforeach
+
+                                                    
                                                     <td> <span class="badge bg-danger fs-5">
                                                             ASISTIO
                                                         </span>
