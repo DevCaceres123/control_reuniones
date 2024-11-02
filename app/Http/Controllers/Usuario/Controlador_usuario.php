@@ -8,6 +8,7 @@ use App\Http\Requests\Usuario\Rol\UpdateRolRequest;
 use App\Http\Requests\Usuario\Usuario\UsuarioRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\registro_lector;
 use App\Models\User;
 use Database\Seeders\UsuarioSeeder;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 use Exception;
 use Illuminate\Support\Facades\Redis;
 use PhpParser\Node\Stmt\TryCatch;
+
+use function PHPUnit\Framework\isEmpty;
 
 class Controlador_usuario extends Controller
 {
@@ -44,17 +47,29 @@ class Controlador_usuario extends Controller
     public function show($id_usuario)
     {
 
-        $user_id = User::select('id')->find($id_usuario);
+        try {
+            $user = User::select('id')->find($id_usuario);
+            $usuario_actual = auth()->user()->id;
+            $registro = registro_lector::select('id', 'cod_targeta')->where('user_id', $usuario_actual)->get();
+
+            if ($registro->isEmpty()) {
+                throw new \Exception('No existe targeta escaneada');
+            }
+
+            $this->mensaje("exito", [
+                'user_id' => $id_usuario,
+                'cod_targeta' => $registro[0]->cod_targeta,
+            ]);
+
+            return response()->json($this->mensaje, 200);
+        } catch (Exception $e) {
+            // Revertir los cambios si hay algún error
 
 
-        $content = $this->datosLector();
-        return response()->json(
-            [
-                'titulo' => "exito",
-                'codigo_targeta' => $content,
-                'user' => $user_id,
-            ]
-        );
+            $this->mensaje("error", $e->getMessage());
+
+            return response()->json($this->mensaje, 200);
+        }
     }
 
 
@@ -180,21 +195,42 @@ class Controlador_usuario extends Controller
 
 
 
-    // public function asignar_targeta(Request $request)
-    // {
-    //     $usuario = User::find($request->id_usuario_targeta);
+    public function asignar_targeta(Request $request)
+    {
+        try {
+            if ($request->id_usuario_targeta == "" || $request->codigo_targeta == "") {
+                throw new \Exception('ninguna targeta fue encontrada');
+            }
 
-    //     $usuario->cod_targeta = $request->codigo_targeta;
+            if(User::where('cod_targeta', $request->codigo_targeta)->get()){
+                registro_lector::where('user_id', auth()->user()->id)->delete();
+                throw new \Exception('La targeta ya fue registrada');
+            }
+            $usuario = User::find($request->id_usuario_targeta);
 
-    //     $usuario->save();
-    //     return response()->json(
-    //         [
-    //             'titulo' => "exito",
-    //             'mensaje' => 'adicionado correctamente',
+            $usuario->cod_targeta = $request->codigo_targeta;
 
-    //         ]
-    //     );
-    // }
+            $usuario->save();
+            registro_lector::where('user_id', auth()->user()->id)->delete();
+            return response()->json(
+                [
+                    'tipo' => "exito",
+                    'mensaje' => 'adicionado correctamente',
+
+                ],
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    'tipo' => "error",
+                    'mensaje' => 'Error ' . $e->getMessage(),
+
+                ],
+                200
+            );
+        }
+    }
 
     //verifica en que estado esta el lector
     private function datosLector()
@@ -235,7 +271,7 @@ class Controlador_usuario extends Controller
         $permissions = [
             'desactivar' => auth()->user()->can('admin.usuario.desactivar'),
             'reset' => auth()->user()->can('admin.usuario.reset'),
-           
+
         ];
         return response()->json([
             'usuarios' => $usuarios,

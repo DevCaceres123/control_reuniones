@@ -127,7 +127,7 @@
 
 
                                                     <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
-                                                        data-id="${row.id}">
+                                                        data-id="{{$usuario->id }}">
                                                         <i class="fas fa-id-card fs-16"></i>
 
                                                     </a>
@@ -291,10 +291,7 @@
                                         style="text-transform:uppercase;background-color: #f0f0f0;">
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <br><br>
-                                <button class="btn btn-success rounded" id="obtenerCodigoTargeta">Obtener</button>
-                            </div>
+                           
                         </div>
                 </div>
                 <div id="error_formulario" class="mt-1 text-center bg-danger m-3 p-2 rounded text-light exitoText"
@@ -318,10 +315,6 @@
 
 
     </div>
-
-
-
-
 
     <!-- MODAL PARA RESETEAR USUARIO -->
     <div class="modal fade" id="ModalResetearUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

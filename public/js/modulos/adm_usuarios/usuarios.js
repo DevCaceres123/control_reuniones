@@ -125,13 +125,14 @@ function listar_usuarios() {
                                 `<a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
                                             <i class="fab fa-stumbleupon-circle fs-16"></i>
                                         </a>` : ''
+
                             }
-                                    <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id="${row.id}">
+                                     <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
                                         <i class="fas fa-id-card fs-16"></i>
                                     </a>
                                 </td>
-                            </div>
-                        `;
+                            </div >
+                `;
                     }
                 },
             ],
@@ -227,10 +228,11 @@ $('#myTable').on('click', '.editar_alumno', function (e) {
 
 // asignar targeta
 $('#table_user').on('click', '.asignar_targeta', function (e) {
+
     e.preventDefault(); // Evitar que el enlace recargue la página
     $('#ModalTargeta').modal('show');
     let id_alumno = $(this).data('id'); // Obtener el id del alumno desde el data-id
-    // console.log(id_alumno);
+
     crud("admin/usuarios", "GET", id_alumno, null, function (error, response) {
 
         if (error != null) {
@@ -242,9 +244,9 @@ $('#table_user').on('click', '.asignar_targeta', function (e) {
             return;
         }
 
-        // console.log(response);
-        $('#id_usuario_targeta').val(response.user.id);
-        $('#codigo_targeta').val(response.codigo_targeta);
+
+        $('#id_usuario_targeta').val(response.mensaje.user_id);
+        $('#codigo_targeta').val(response.mensaje.cod_targeta);
         //listar_usuarios();
 
 
@@ -317,10 +319,12 @@ $('#registrtarCodigoTargeta').submit(function (e) {
     let datosFormulario = $('#registrtarCodigoTargeta').serialize();
 
 
-    console.log(datosFormulario);
+    // console.log(datosFormulario);
+    vaciar_formulario('registrtarCodigoTargeta');
 
     crud("admin/asignar_targeta", "POST", null, datosFormulario, function (error, response) {
 
+        console.log(response);
         if (error != null) {
             mensajeAlerta(error, "error");
             return;
@@ -333,6 +337,7 @@ $('#registrtarCodigoTargeta').submit(function (e) {
         listar_usuarios();
         mensajeAlerta(response.mensaje, response.tipo);
         $('#ModalTargeta').modal('hide');
+        vaciar_formulario('registrtarCodigoTargeta');
 
     });
 })
