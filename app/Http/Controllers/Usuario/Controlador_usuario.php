@@ -201,8 +201,8 @@ class Controlador_usuario extends Controller
             if ($request->id_usuario_targeta == "" || $request->codigo_targeta == "") {
                 throw new \Exception('ninguna targeta fue encontrada');
             }
-
-            if(User::where('cod_targeta', $request->codigo_targeta)->get()){
+            $targeta_encontrada= User::where('cod_targeta', $request->codigo_targeta)->get();
+            if($targeta_encontrada->isEmpty()==false){
                 registro_lector::where('user_id', auth()->user()->id)->delete();
                 throw new \Exception('La targeta ya fue registrada');
             }
