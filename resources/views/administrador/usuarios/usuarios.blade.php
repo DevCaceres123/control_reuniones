@@ -94,8 +94,7 @@
                                                                 </a>
                                                             </div>
                                                         @endif
-                                                        @else
-
+                                                    @else
                                                         <p>No permitido...</p>
                                                     @endcan
 
@@ -120,14 +119,18 @@
                                                     @can('admin.usuario.reset')
                                                         <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario"
                                                             data-id="{{ $usuario->id }}">
-                                                            <i class="fab fa-stumbleupon-circle fs-16"></i>
+                                                            <i class="fas fa-redo fs-16"></i>
 
                                                         </a>
                                                     @endcan
 
+                                                    <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center asignar_targeta"
+                                                        data-id="{{ $usuario->id }}">
+                                                        <i class="far fa-edit fs-16"></i>
 
+                                                    </a>
                                                     <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
-                                                        data-id="{{$usuario->id }}">
+                                                        data-id="{{ $usuario->id }}">
                                                         <i class="fas fa-id-card fs-16"></i>
 
                                                     </a>
@@ -152,11 +155,11 @@
         <div class="modal-dialog modal-center modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                
-                        <h4 class="modal-title " id="exampleModalLabel"><span
-                                class="badge badge-outline-primary rounded">REGISTRAR NUEVO USUARIO</span></h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                
+
+                    <h4 class="modal-title " id="exampleModalLabel"><span
+                            class="badge badge-outline-primary rounded">REGISTRAR NUEVO USUARIO</span></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
 
                 </div>
                 <div class="modal-body">
@@ -223,11 +226,34 @@
                                 </div>
 
                             </div>
+
+                            <div class="form-group col-12">
+
+                                <label for="" class="form-label">Nº TARGETA</label>
+                                <div class="row">
+                                    <div class="form-group py-1 col-10 " id="group_name_usuario">
+                                        <input type="text" class="form-control rounded" name="cod_targeta"
+                                            id="cod_targeta" style="text-transform:uppercase;background-color: #f0f0f0;"
+                                            placeholder="targeta">
+                                        <div id="_cod_targeta"></div>
+                                    </div>
+
+                                    <div class="form-group py-1 col-2">
+                                        <label for="" class="form-label"></label>
+                                        <a class="btn btn-md btn-outline-success" id="obtnerTargeta">
+                                            <i class="fas fa-search fs-16"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
                             <div class="form-group py-2 col-md-6">
                                 <label for="" class="form-label">USUARIO</label>
                                 <div class=" " id="group_name_usuario">
                                     <input type="text" class="form-control rounded" name="usuario" id="usuario"
-                                        style="text-transform:uppercase;background-color: #f0f0f0;" placeholder="usuario">
+                                        style="background-color: #f0f0f0;" placeholder="usuario">
                                     <div id="_usuario"></div>
                                 </div>
 
@@ -236,7 +262,7 @@
                                 <label for="" class="form-label">CONTRASEÑA</label>
                                 <div class="" id="group_password_usuario">
                                     <input type="text" class="form-control rounded" name="password" id="password"
-                                        style="text-transform:uppercase; background-color: #f0f0f0;"
+                                        style="background-color: #f0f0f0;"
                                         placeholder="contraseña">
                                     <div id="_password"></div>
                                 </div>
@@ -244,13 +270,7 @@
                             </div>
                         </div>
                 </div>
-                <div id="error_formulario" class="mt-1 text-center bg-danger m-3 p-2 rounded text-light exitoText"
-                    style="display:none">
-                    <spam>
-
-                        <b class="">Error Por favor llene correctamente los campos</b>
-                    </spam>
-                </div>
+              
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
@@ -291,16 +311,10 @@
                                         style="text-transform:uppercase;background-color: #f0f0f0;">
                                 </div>
                             </div>
-                           
+
                         </div>
                 </div>
-                <div id="error_formulario" class="mt-1 text-center bg-danger m-3 p-2 rounded text-light exitoText"
-                    style="display:none">
-                    <spam>
-
-                        <b class="">Error Por favor llene correctamente los campos</b>
-                    </spam>
-                </div>
+              
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
@@ -350,7 +364,7 @@
                                     <div class="container-validation" id="group_usuarioReset">
                                         <input type="text" class="form-control rounded-pill" name="usuarioReset"
                                             id="usuarioReset" disabled
-                                            style="text-transform:uppercase; background-color: #f0f0f0;">
+                                            style=" background-color: #f0f0f0;">
 
                                         <i class="container-input__icon mdi"></i>
                                     </div>
@@ -361,7 +375,7 @@
                                     <div class="container-validation" id="group_passwordReset">
                                         <input type="text" class="form-control rounded-pill" name="passwordReset"
                                             id="passwordReset" disabled
-                                            style="text-transform:uppercase; background-color: #f0f0f0;">
+                                            style="text-transform:lowercase; background-color: #f0f0f0;">
                                         <i class="container-input__icon mdi"></i>
                                     </div>
 

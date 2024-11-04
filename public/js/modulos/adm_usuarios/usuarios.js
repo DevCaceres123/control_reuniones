@@ -123,10 +123,15 @@ function listar_usuarios() {
                                 <td>
                                     ${permissions['reset'] ? // Verificar permiso para resetear usuario
                                 `<a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
-                                            <i class="fab fa-stumbleupon-circle fs-16"></i>
+                                            <i class="fas fa-redo fs-16"></i>
                                         </a>` : ''
 
                             }
+                                  <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center asignar_targeta"
+                                                        data-id="${row.id}">
+                                                        <i class="far fa-edit fs-16"></i>
+
+                                  </a>
                                      <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
                                         <i class="fas fa-id-card fs-16"></i>
                                     </a>
@@ -181,7 +186,28 @@ $('#formularioUsuario').submit(function (e) {
 });
 
 
+// OBTENER NUMERO DE TARGETA EN EL MODAL
 
+$('#obtnerTargeta').click(function (e) {
+    e.preventDefault();
+    let id_alumno = 0;
+    crud("admin/usuarios", "GET", id_alumno, null, function (error, response) {
+
+        if (error != null) {
+            mensajeAlerta(error, "error");
+            return;
+        }
+        if (response.tipo != "exito") {
+            $('#cod_targeta').val(response.mensaje);
+            
+            return;
+        }
+
+        $('#cod_targeta').val(response.mensaje.cod_targeta);
+
+    });
+
+})
 
 // Agregar el evento de clic después de que la tabla haya sido creada
 $('#table_user').on('click', '.desactivar_usuario', function (e) {

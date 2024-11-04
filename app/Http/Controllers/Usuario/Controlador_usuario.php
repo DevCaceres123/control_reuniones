@@ -87,6 +87,7 @@ class Controlador_usuario extends Controller
             $usuario->materno = $request->materno;
             $usuario->email = $request->email;
             $usuario->estado = "activo";
+            $usuario->cod_targeta = $request->cod_targeta;
             $usuario->usuario = $request->usuario;
             $usuario->password = bcrypt($request->password);
             // $usuario->rol = $request->usuario_edad;
@@ -96,7 +97,14 @@ class Controlador_usuario extends Controller
 
 
             $usuario->assignRole(intval($request->role));
+            // se busca el copdigo de targeta si se obtiene y se elimina
+            $targeta_encontrada = User::where('cod_targeta', $request->cod_targeta)->get();
+            if ($targeta_encontrada->isEmpty() == false) {
+                registro_lector::where('user_id', auth()->user()->id)->delete();
+            }
             // Confirmar la transacción si todo va bien
+
+
             DB::commit();
 
             $this->mensaje("exito", "Usuario Registrado Correctamente");
@@ -201,8 +209,8 @@ class Controlador_usuario extends Controller
             if ($request->id_usuario_targeta == "" || $request->codigo_targeta == "") {
                 throw new \Exception('ninguna targeta fue encontrada');
             }
-            $targeta_encontrada= User::where('cod_targeta', $request->codigo_targeta)->get();
-            if($targeta_encontrada->isEmpty()==false){
+            $targeta_encontrada = User::where('cod_targeta', $request->codigo_targeta)->get();
+            if ($targeta_encontrada->isEmpty() == false) {
                 registro_lector::where('user_id', auth()->user()->id)->delete();
                 throw new \Exception('La targeta ya fue registrada');
             }

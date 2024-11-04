@@ -32,6 +32,7 @@ class UsuarioRequest extends BasePrincipalRequest
                     'materno' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:users,email',
                     'role' => 'required|integer',
+                    'cod_targeta' => 'nullable|unique:users,cod_targeta',
                     'usuario' => 'required|string|min:6|unique:users',
                     'password' => 'required|string|min:8',
                     
