@@ -61,8 +61,9 @@ class Controlador_targetas extends Controller
     public function guardarDatosRegistro($lector, $cod_targeta)
     {
         DB::beginTransaction();
+      
         try {
-
+            $this->verificar_registro_usuario($lector);
             $registroLector = new registro_lector();
             $registroLector->uso = $lector->uso;
             $registroLector->cod_targeta = $cod_targeta;
@@ -79,6 +80,30 @@ class Controlador_targetas extends Controller
         }
     }
 
+    // se verificara se existe un registro en la tabla con el usaurio y si el caso se eliminara 
+    // el registro para poder asignarle la nueva targeta
+    public function verificar_registro_usuario($lector)
+    {
+
+
+        DB::beginTransaction();
+        try {
+
+            $registros = registro_lector::select('id')->where('user_id', $lector->user_id)->get();
+
+            if ($registros->isEmpty()==false) {
+                foreach ($registros as $registro) {
+                    $registro->delete();
+                }
+            }
+
+            // Confirmar la transacción si todo va bien
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return "ocurrio un problema al eliminar usuarios repetidos";
+        }
+    }
     public function registrarAsistencia($codigo_targeta, $lector_id)
     {
 

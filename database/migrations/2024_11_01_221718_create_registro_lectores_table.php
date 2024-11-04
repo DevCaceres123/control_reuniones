@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('registro_lectores', function (Blueprint $table) {
             $table->id();
             $table->string('uso',20);
-            $table->string('cod_targeta', 11)->unique();
+            $table->string('cod_targeta', 11);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });

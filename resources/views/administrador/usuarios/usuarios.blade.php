@@ -152,11 +152,11 @@
         <div class="modal-dialog modal-center modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    @can('admin.usuario.crear ')
+                
                         <h4 class="modal-title " id="exampleModalLabel"><span
                                 class="badge badge-outline-primary rounded">REGISTRAR NUEVO USUARIO</span></h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    @endcan
+                
 
                 </div>
                 <div class="modal-body">
