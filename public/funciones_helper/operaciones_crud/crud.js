@@ -9,7 +9,7 @@ export async function crud(url, metodo, idRegistro = null, datos = null, callbac
 
         // CUANDO SE REALIZA UN PUT
         if (idRegistro != null && datos != null) {
-            console.log(datos);
+            // console.log(datos);
             response = await fetch(`/${url}/${idRegistro}`, {
                 method: metodo, // or 'PUT'
                 headers: {

@@ -199,7 +199,30 @@ class Controlador_usuario extends Controller
     }
 
 
+    public function editar_rol(UsuarioRequest $request)
+    {
 
+        $user = User::find($request->user_id);
+
+
+
+        // Encuentra el rol por ID
+        $nuevoRol = Role::find($request->rol_id);
+
+        if (!$nuevoRol) {
+            // Asigna el nuevo rol, eliminando cualquier rol anterior
+
+            $this->mensaje("error", "Rol no encontrado");
+
+            return response()->json($this->mensaje, 200);
+        }
+
+
+
+        $this->mensaje("exito", "Usuario reseteado correctamente");
+
+        return response()->json($this->mensaje, 200);
+    }
 
 
 

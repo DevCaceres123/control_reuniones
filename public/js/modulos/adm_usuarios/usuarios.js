@@ -35,8 +35,8 @@ function listar_usuarios() {
                 {
                     data: null,
                     className: 'table-td',
-                    render: function (data) {
-                        return data.rowIndex + 1; // Usar el índice para el número de fila
+                    render: function (data, type, row, meta) {
+                        return meta.row + 1; // Usar meta.row para obtener el índice de la fila
                     }
                 },
                 {
@@ -127,7 +127,7 @@ function listar_usuarios() {
                                         </a>` : ''
 
                             }
-                                  <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center asignar_targeta"
+                                  <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
                                                         data-id="${row.id}">
                                                         <i class="far fa-edit fs-16"></i>
 
@@ -186,8 +186,7 @@ $('#formularioUsuario').submit(function (e) {
 });
 
 
-// OBTENER NUMERO DE TARGETA EN EL MODAL
-
+// OBTENER NUMERO DE TARGETA EN EL MODAL USUARIO
 $('#obtnerTargeta').click(function (e) {
     e.preventDefault();
     let id_alumno = 0;
@@ -199,7 +198,6 @@ $('#obtnerTargeta').click(function (e) {
         }
         if (response.tipo != "exito") {
             $('#cod_targeta').val(response.mensaje);
-            
             return;
         }
 
@@ -245,11 +243,44 @@ $('#table_user').on('click', '.desactivar_usuario', function (e) {
 });
 
 
-$('#myTable').on('click', '.editar_alumno', function (e) {
+$('#table_user').on('click', '.cambiar_rol', function (e) {
     e.preventDefault(); // Evitar que el enlace recargue la página
-    alert("xd");
+    $('#ModalRol').modal('show');
+    let id_user = $(this).data('id');
+
+    $('#user_id_edit').val(id_user);
+
 });
 
+
+$('#formEditarRol').submit(function (e) {
+    e.preventDefault(); // Evitar que el enlace recargue la página
+    let id_user = $('#user_id_edit').val();
+
+    let datosFormulario = {
+        'user_id': $('#user_id_edit').val(),
+        'rol_id': $('#role_edit').val(),
+    };
+    crud("admin/editar_rol", "PUT", id_user, datosFormulario, function (error, response) {
+
+        if (error != null) {
+            mensajeAlerta(error, "error");
+            return;
+        }
+        if (response.tipo != "exito") {
+            mensajeAlerta(response.mensaje, response.tipo);
+            return;
+        }
+        mensajeAlerta(response.mensaje, response.tipo);
+       
+        
+        listar_usuarios();
+        vaciar_formulario("formEditarRol");
+        $('#ModalRol').modal('hide');
+
+    });
+
+});
 
 
 // asignar targeta

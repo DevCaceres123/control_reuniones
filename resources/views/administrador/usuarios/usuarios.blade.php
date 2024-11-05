@@ -25,7 +25,6 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>Nº</th>
-
                                             <th>NOMBRE</th>
                                             <th>PATERNO</th>
                                             <th>MATERNO</th>
@@ -124,7 +123,7 @@
                                                         </a>
                                                     @endcan
 
-                                                    <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center asignar_targeta"
+                                                    <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
                                                         data-id="{{ $usuario->id }}">
                                                         <i class="far fa-edit fs-16"></i>
 
@@ -262,15 +261,14 @@
                                 <label for="" class="form-label">CONTRASEÑA</label>
                                 <div class="" id="group_password_usuario">
                                     <input type="text" class="form-control rounded" name="password" id="password"
-                                        style="background-color: #f0f0f0;"
-                                        placeholder="contraseña">
+                                        style="background-color: #f0f0f0;" placeholder="contraseña">
                                     <div id="_password"></div>
                                 </div>
 
                             </div>
                         </div>
                 </div>
-              
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
@@ -314,7 +312,7 @@
 
                         </div>
                 </div>
-              
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
@@ -322,13 +320,56 @@
                             class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
                 </div>
 
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MODAL PARA EDITAR ROL -->
+    <div class="modal fade" id="ModalRol" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-center modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title " id="exampleModalLabel"><span
+                            class="badge badge-outline-primary rounded">EDITAR ROL</span></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarRol">
+                        <div class="form-group py-2 col-md-12">
+                            <label for="apellidoMaterno_socio" class="form-label">ROL</label>
+                            <input type="hidden" name="user_id_edit" id="user_id_edit">
+                            <div class="" id="group_rol_usuario">
+                                <select name="role_edit" id="role_edit" class="form-control  rounded" require>
+                                    <option disabled selected>Seleccione una opción</option>
+
+                                    @foreach ($roles as $value)
+                                        <option class="text-capitalize" value={{ $value->id }}>
+                                            {{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                                <div id="_role_edit"></div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
+                            class="ri-close-line me-1 align-middle"></i> Cerrar</button>
+                    <button type="submit" class="btn btn-success rounded btn-sm"><i
+                            class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
+                </div>
 
                 </form>
             </div>
         </div>
 
-
     </div>
+
 
     <!-- MODAL PARA RESETEAR USUARIO -->
     <div class="modal fade" id="ModalResetearUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -363,8 +404,7 @@
                                     <label for="" class="form-label">Usuario</label>
                                     <div class="container-validation" id="group_usuarioReset">
                                         <input type="text" class="form-control rounded-pill" name="usuarioReset"
-                                            id="usuarioReset" disabled
-                                            style=" background-color: #f0f0f0;">
+                                            id="usuarioReset" disabled style=" background-color: #f0f0f0;">
 
                                         <i class="container-input__icon mdi"></i>
                                     </div>

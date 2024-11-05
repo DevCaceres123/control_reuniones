@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests\Usuario\Usuario;
+
 use App\Http\Requests\BasePrincipalRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,12 +36,19 @@ class UsuarioRequest extends BasePrincipalRequest
                     'cod_targeta' => 'nullable|unique:users,cod_targeta',
                     'usuario' => 'required|string|min:6|unique:users',
                     'password' => 'required|string|min:8',
-                    
+
                 ];
             case 'usuarios.update':
                 return [
                     'id_usaurio' => 'required|integer',
                     'estado' => 'required|string|in:activo,inactivo',
+                    // Más reglas según sea necesario
+                ];
+
+            case 'editar_rol':
+                return [
+                    'user_id_edit' => 'required',
+                    'role_edit' => 'required',
                     // Más reglas según sea necesario
                 ];
             default:
@@ -78,7 +86,7 @@ class UsuarioRequest extends BasePrincipalRequest
             // 'email.max' => 'El correo electrónico no puede tener más de 255 caracteres.',
             // 'email.unique' => 'El correo electrónico ya está en uso.',
 
-         
+
         ];
     }
 }
