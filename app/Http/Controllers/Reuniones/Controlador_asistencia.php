@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Pagos;
+namespace App\Http\Controllers\Reuniones;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class Controlador_pagos extends Controller
+class Controlador_asistencia extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('administrador.reunion.asistencia', [
+            
+        ]);
     }
 
     /**

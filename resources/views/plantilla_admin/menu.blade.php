@@ -89,7 +89,7 @@
                                         Reuniones</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Control de Asistencia</a>
+                                    <a class="nav-link" href="{{ route('asistencias.index') }}">Control de Asistencia</a>
                                 </li>
 
                             </ul><!--end nav-->
@@ -107,10 +107,10 @@
                             <ul class="nav flex-column">
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Cuotas</a>
+                                    <a class="nav-link" href="{{ route('cuotas.index') }}">Cuotas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('usuarios.index') }}">Pagar Coutas</a>
+                                    <a class="nav-link" href="{{ route('pagarCuotas.index') }}">Pagar Coutas</a>
                                 </li>
 
                             </ul><!--end nav-->

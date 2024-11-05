@@ -11,7 +11,7 @@ use App\Http\Requests\Reunion\ReunionRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class Controlador_reuniones extends Controller
+class Controlador_planificacion extends Controller
 {
     public $mensaje = [];
     /**

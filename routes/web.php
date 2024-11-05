@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Lectores\Controlador_lectores;
+use App\Http\Controllers\Pagos\Controlador_cuotas;
+use App\Http\Controllers\Pagos\Controlador_pagarCuotas;
 use App\Http\Controllers\Pagos\Controlador_pagos;
-use App\Http\Controllers\Reuniones\Controlador_reuniones;
+use App\Http\Controllers\Reuniones\Controlador_asistencia;
+use App\Http\Controllers\Reuniones\Controlador_planificacion;
 use App\Http\Controllers\Usuario\Controlador_login;
 use App\Http\Controllers\Usuario\Controlador_permisos;
 use App\Http\Controllers\Usuario\Controlador_rol;
@@ -54,18 +57,31 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
 
 
     // PARA LAS REUNIONES
-    Route::controller(Controlador_reuniones::class)->group(function () {
+    Route::controller(Controlador_planificacion::class)->group(function () {
 
-        Route::resource('/reuniones', Controlador_reuniones::class);
+        Route::resource('/reuniones', Controlador_planificacion::class);
         Route::get('/listar_reuniones', 'listar_reuniones');
         Route::get('/lista_asistencia/{id_reunion}', 'lista_asistencia');
     });
 
-    // PARA LOS PAGOS
-    Route::controller(Controlador_pagos::class)->group(function () {
+    // asistencia
+    Route::controller(Controlador_asistencia::class)->group(function () {
 
-        Route::resource('/pagos', Controlador_pagos::class);
+        Route::resource('/asistencias', Controlador_asistencia::class);
     });
+
+
+    // PARA LOS PAGOS
+    Route::controller(Controlador_cuotas::class)->group(function () {
+
+        Route::resource('/cuotas', Controlador_cuotas::class);
+    });
+
+    Route::controller(Controlador_pagarCuotas::class)->group(function () {
+
+        Route::resource('/pagarCuotas', Controlador_pagarCuotas::class);
+    });
+    
 
     // PARA LOS LECTORES
     Route::controller(Controlador_lectores::class)->group(function () {
@@ -73,6 +89,5 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
         Route::resource('/lectores', Controlador_lectores::class);
         Route::put('/lectores/terminar_uso/{id_lector}', 'terminar_uso');
         Route::put('/lectores/actualizar_lector/{id_lector}', 'actualizar_lector');
-
     });
 });
