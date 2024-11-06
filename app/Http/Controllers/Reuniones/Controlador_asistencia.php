@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Reuniones;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Reunion;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Controlador_asistencia extends Controller
 {
@@ -12,9 +16,7 @@ class Controlador_asistencia extends Controller
      */
     public function index()
     {
-        return view('administrador.reunion.asistencia', [
-            
-        ]);
+        return view('administrador.reunion.asistencia', []);
     }
 
     /**
@@ -30,9 +32,56 @@ class Controlador_asistencia extends Controller
      */
     public function store(Request $request)
     {
-        //
+        echo "llego";
+        $user = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
+        $reunion = $user->reuniones()
+            ->whereDate('reuniones.entrada', '>=', $request->fecha_inicio)
+            ->whereDate('reuniones.salida', '<=', $request->fecha_final)
+            ->get();
+
+
+        $entradaSalidas = DB::table('user_reunion')
+            ->where('user_id', $user->id)
+            ->select('salida', 'reunion_id', 'entrada') // Selecciona los campos que necesitas
+            ->get();
+
+        $pdf = Pdf::loadView('administrador/pdf/reporteControlAsistencia');
+        // Retorna el PDF para descargar directamente
+        return $pdf->download('reporteControlAsistencia.pdf');
     }
 
+
+    public function reporte_asistencia(Request $request)
+    {
+
+        $user = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
+        if (!$user) {
+            // Redirige de regreso con un mensaje de error en la sesión
+            return redirect()->back()->withErrors(['ci_estudiante' => 'cedeula de indentidad no encontrada']);
+        }
+        $reuniones = $user->reuniones()
+            ->whereDate('reuniones.entrada', '>=', $request->fecha_inicio)
+            ->whereDate('reuniones.salida', '<=', $request->fecha_final)
+            ->get();
+
+
+        // Reuniones no asistidas por el usuario en el rango de fechas
+        $reunionesNoAsistidas = Reunion::whereDate('entrada', '>=', $request->fecha_inicio)
+            ->whereDate('salida', '<=', $request->fecha_final)
+            ->whereDoesntHave('users', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->get();
+
+        $entradaSalidas = DB::table('user_reunion')
+            ->where('user_id', $user->id)
+            ->select('salida', 'reunion_id', 'entrada') // Selecciona los campos que necesitas
+            ->get();
+
+        $pdf = Pdf::loadView('administrador/pdf/reporteControlAsistencia', compact('user', 'reuniones', 'entradaSalidas', 'reunionesNoAsistidas'));
+
+        return $pdf->stream();
+    }
     /**
      * Display the specified resource.
      */

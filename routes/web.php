@@ -71,6 +71,7 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     Route::controller(Controlador_asistencia::class)->group(function () {
 
         Route::resource('/asistencias', Controlador_asistencia::class);
+        Route::post('/reporte_asistencia','reporte_asistencia')->name('asistencia.reporte_asistencia');
     });
 
 

@@ -54,7 +54,10 @@
         .detalles_reunion {
             margin-top: 20px;
             font-size: 14px;
+
+            text-transform: capitalize !important;
         }
+
 
         .detalles_reunion hr {
             margin: 10px 0;
@@ -104,7 +107,7 @@
         }
 
 
-        .totalBoletas .observados{
+        .totalBoletas .observados {
             position: absolute;
             top: 0;
             right: 50%;
@@ -114,6 +117,7 @@
             font-weight: bold;
             text-align: center
         }
+
         .totalBoletas .asistencia {
             position: absolute;
             top: 0;
@@ -139,10 +143,10 @@
 
         <!-- Detalles de la reunión -->
         <div class="detalles_reunion">
-            <p><b>NOMBRE DE LA REUNIÓN:</b> {{ $reunion->titulo ?? 'N/A' }}</p>
-            <hr>  
-            <p><b>HORA DE INICIO:</b> {{ $reunion->entrada ?? 'N/A' }} | <b>FIN:</b>
-                {{ $reunion->salida ?? 'N/A' }}</p>
+            <p><b>NOMBRE DEL ESTUDIANTE:</b> {{ $user->nombres ?? 'N/A' }} {{ $user->paterno ?? 'N/A' }}
+                {{ $user->materno ?? 'N/A' }}</p>
+            <hr>
+
         </div>
 
         <h3 class="titulo">ASISTENCIA</h3>
@@ -151,9 +155,7 @@
             <thead>
                 <tr>
                     <th>Nº</th>
-                    <th>CI</th>
-                    <th>NOMBRE COMPLETO</th>
-
+                    <th>FECHA REUNION</th>
                     <th>ENTRADA</th>
                     <th>SALIDA</th>
                     <th>ESTADO</th>
@@ -166,16 +168,14 @@
                 $noAsistencia = 0;
                 $observados = 0;
                 ?>
-                @foreach ($asistentes as $index => $registro)
+                @foreach ($reuniones as $index => $reunion)
                     <tr>
-                        <td>{{ $count ++ }}</td>
-                        <td>{{ $registro->ci ?? 'N/A' }}</td>
-                        <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
-                            {{ $registro->materno ?? 'N/A' }}</td>
+                        <td>{{ $count++ }}</td>
+                        <td>{{ \Carbon\Carbon::parse($reunion->entrada)->format('Y-m-d') }}</td>
                         @foreach ($entradaSalidas as $item)
-                            @if ($registro->id === $item->user_id)
-                                <td>{{ $item->entrada ?? 'N/A' }}</td>
-                                <td>{{ $item->salida ?? 'N/A' }}</td>
+                            @if ($reunion->id === $item->reunion_id)
+                            <td>{{ \Carbon\Carbon::parse($item->entrada)->format('H:s:i') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->entrada)->format('H:s:i') }}</td>
                                 @if ($item->entrada != '' && $item->salida != '')
                                     <td>PRESENTE</td>
                                     <?php
@@ -192,14 +192,13 @@
                     </tr>
                 @endforeach
 
-                @foreach ($noAsistentes as $index => $registro)
+                @foreach ($reunionesNoAsistidas as $index => $registro)
                     <tr>
-                        <td>{{ $count ++ }}</td>
-                        <td>{{ $registro->ci ?? 'N/A' }}</td>
-                        <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
-                            {{ $registro->materno ?? 'N/A' }}</td>
-                        <td>{{ $registro->entrada ?? 'N/A' }}</td>
-                        <td>{{ $registro->salida ?? 'N/A' }}</td>
+                        <td>{{ $count++ }}</td>
+                        <td>{{ \Carbon\Carbon::parse($registro->entrada)->format('Y-m-d') }}</td>
+
+                        <td>N/A</td>
+                        <td>N/A</td>
                         <td>FALTA</td>
 
                         <?php
@@ -213,9 +212,9 @@
 
 
         <div class="totalBoletas">
-            <p class="inasitencia">TOTAL FALTAS: <b>{{$noAsistencia}}</b></p>
-            <p class="observados">TOTAL OBSERVADOS: <b>{{$observados}}</b></p>
-            <p class="asistencia">TOTAL ASISTENTES: <b>{{$asistencia}}</b></p>
+            <p class="inasitencia">TOTAL FALTAS: <b>{{ $noAsistencia }}</b></p>
+            <p class="observados">TOTAL OBSERVADOS: <b>{{ $observados }}</b></p>
+            <p class="asistencia">TOTAL ASISTENTES: <b>{{ $asistencia }}</b></p>
         </div>
     </div>
 </body>
