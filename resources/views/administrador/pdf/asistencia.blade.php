@@ -130,9 +130,9 @@
     <div class="container_boleta">
         <!-- Información de la empresa -->
         <div class="info_empresa">
-            <h2>MISIÓN LUZ DE VIDA</h2>
-            <p><b>CELULAR:</b> 68086675</p>
-            <p>ZONA SAN JUAN | CALLE NATANIEL AGUIRRE | N°: 1245</p>
+            <h2>ASOCIACION MISIÓN LUZ DE VIDA</h2>
+            <p><b>CELULAR:</b> 69750589</p>
+            <p>Zona: Playa Verde del distrito 7 de la Ciudad de El Alto</p>
             <p>FECHA REPORTE: {{ now()->format('d-m-Y') }}</p>
             <img src="assets/logo.jpg" alt="Logo" width="90" height="95">
         </div>
@@ -145,7 +145,7 @@
                 {{ $reunion->salida ?? 'N/A' }}</p>
         </div>
 
-        <h3 class="titulo">LISTA DE ASISTENCIA</h3>
+        <h3 class="titulo">ASISTENCIA</h3>
         <!-- Tabla de asistencia -->
         <table class="tabla">
             <thead>
