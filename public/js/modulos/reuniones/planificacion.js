@@ -85,28 +85,31 @@ function listar_reuniones() {
                 },
                 {
                     data: null,
-                    className: 'table-td',
+                    className: 'table-td text-end',
                     render: function (data, type, row) {
                         if (row.estado == "activo") {
-                            return `              
+                            return ` <div>
                             <a class="btn btn-sm btn-outline-danger px-2 d-inline-flex align-items-center terminar_reunion" data-id="${row.id}">
                                 <i class="fas fa-window-close fs-16"></i>
                             </a>
                               <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center " data-id="${row.id}">
                                 <i class="fas fa-clipboard-check fs-16"></i>
                             </a>
-                              <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center generar_reporte_asistencia" data-id="${row.id}">
+                              <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
                                 <i class="fas fa-id-cardfas fa-clipboard-list fs-16"></i>
-                            </a> `;
+                            </a> 
+                            </div>`;
                         } else {
                             return `
                               </a>
                               <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center ">
                                 <i class="fas fa-clipboard-check fs-16"></i>
                             </a>
-                              <a class="btn btn-sm btn-outline-info px-2 d-inline-flex  align-items-center generar_reporte_asistencia" data-id="${row.id}">
+                            
+                            
+                              <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
                                 <i class="fas fa-id-cardfas fa-clipboard-list fs-16"></i>
-                            </a> 
+                            </a>
                             `;
                         }
 

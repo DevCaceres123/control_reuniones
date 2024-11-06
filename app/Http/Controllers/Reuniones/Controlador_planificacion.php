@@ -8,8 +8,11 @@ use App\Models\Reunion;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reunion\ReunionRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class Controlador_planificacion extends Controller
 {
@@ -184,15 +187,24 @@ class Controlador_planificacion extends Controller
 
     public function lista_asistencia($reunion_id)
     {
-        $asistenciaReunion = Reunion::with('users')->where('id', $reunion_id)->get();
+        $estudiantes = User::role('estudiante')->get();
+
+
+        $reunion = Reunion::find($reunion_id);
+
+        // Obtener los asistentes a la reunión
+        $estudiantesRegistrados = Reunion::find($reunion_id)->users()->role('estudiante')->get();
+
+
+        // $asistenciaReunion = Reunion::with('users')->where('id', $reunion_id)->get();
 
         $entradaSalidas = DB::table('user_reunion')
-        ->where('reunion_id', $reunion_id)
-        ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
-        ->get(); // Cambia first() por get()
-    
+            ->where('reunion_id', $reunion_id)
+            ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
+            ->get(); // Cambia first() por get()
+
         // $asistenciaReunion = Reunion::whereHas('users')->get();
-        return view('administrador.reunion.listaAsistencia', compact('asistenciaReunion', 'entradaSalidas'));
+        return view('administrador.reunion.listaAsistencia', compact('estudiantesRegistrados', 'entradaSalidas', 'reunion_id'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -230,6 +242,110 @@ class Controlador_planificacion extends Controller
         }
     }
 
+
+    public function reporte_asistencia($reunion_id)
+    {
+
+        // Obtener todos los estudiantes
+        $estudiantes = User::role('estudiante')->get();
+        // $estudiantes=User::all();
+
+        $reunion = Reunion::find($reunion_id);
+
+        // Obtener los asistentes a la reunión
+        $asistentes = Reunion::find($reunion_id)->users()->role('estudiante')->get();
+
+        // Filtrar los estudiantes que no asistieron
+        $noAsistentes = $estudiantes->diff($asistentes);
+
+
+        $entradaSalidas = DB::table('user_reunion')
+            ->where('reunion_id', $reunion_id)
+            ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
+            ->get(); // Cambia first() por get()
+
+        $pdf = Pdf::loadView('administrador/pdf/asistencia', compact('reunion', 'asistentes', 'noAsistentes', 'entradaSalidas'));
+        return $pdf->stream();
+    }
+
+
+    public function buscar_usuario(String $user_id)
+    {
+        $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $user_id)->role('estudiante')->get();
+        if ($user_estudiante->isEmpty()) {
+
+            $this->mensaje("error", null);
+
+            return response()->json($this->mensaje, 200);
+        }
+
+
+        $this->mensaje("exito", $user_estudiante);
+
+        return response()->json($this->mensaje, 200);
+    }
+
+
+    public function nueva_asistencia(ReunionRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            if ($request->role == "entrada") {
+                $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
+            }
+            if ($request->role == "salida") {
+                $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
+            }
+
+            DB::commit();
+            $this->mensaje("exito", "Ingresado correctamente");
+            return response()->json($this->mensaje, 200);
+        } catch (Exception $e) {
+
+            DB::rollBack();
+            $this->mensaje("error", "error" . $e->getMessage());
+            return response()->json($this->mensaje, 200);
+        }
+    }
+
+    public function verificarDatos($reunion_id, $user_id, $tipo_entrada)
+    {
+
+        $usuario = new User();
+        try {
+            $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })->where('id', 1)->first();
+
+            if (!$reunion) {
+
+                $usuario->reuniones()->attach($reunion_id, [
+                    'user_id' => $user_id,
+                    $tipo_entrada => Carbon::now(),
+                    'manual' => "fue insertado manualmente",
+                    "user_manual" => auth()->user()->id,
+                ]);
+            } else {
+                $reunion->users()->updateExistingPivot(
+                    $user_id,
+                    [
+                        'user_id' => $user_id,
+                        $tipo_entrada => Carbon::now(),
+                        'manual' => "fue insertado manualmente",
+                        "user_manual" => auth()->user()->id,
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+
+            return "error" . $e->getMessage();
+        }
+
+        //    $user = User::find($user_id)->reuniones()->where('reunion_id', $reunion_id)->get()
+
+
+        //     return $user->updateExistingPivot();
+    }
     /**
      * Remove the specified resource from storage.
      */
@@ -237,6 +353,10 @@ class Controlador_planificacion extends Controller
     {
         //
     }
+
+
+
+
 
     public function mensaje($titulo, $mensaje)
     {

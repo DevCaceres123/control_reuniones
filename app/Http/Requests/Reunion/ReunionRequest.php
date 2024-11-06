@@ -38,6 +38,12 @@ class ReunionRequest extends BasePrincipalRequest
                     'estado' => 'required|string|in:activo,inactivo',
                     // Más reglas según sea necesario
                 ];
+            case 'reuniones.nueva_asistencia':
+                return [
+                    // Añade aquí las reglas para 'nueva_asistencia'
+                    'role' => 'required|in:entrada,salida',
+                    
+                ];
             default:
                 return [];
         }

@@ -62,6 +62,9 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
         Route::resource('/reuniones', Controlador_planificacion::class);
         Route::get('/listar_reuniones', 'listar_reuniones');
         Route::get('/lista_asistencia/{id_reunion}', 'lista_asistencia');
+        Route::get('/reporte_asistencia/{id_reunion}', 'reporte_asistencia');
+        Route::get('/buscar_usuario/{id_reunion}', 'buscar_usuario');
+        Route::post('/nueva_asistencia', 'nueva_asistencia')->name('reuniones.nueva_asistencia');
     });
 
     // asistencia

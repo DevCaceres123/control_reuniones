@@ -23,7 +23,7 @@ class UsuarioSeeder extends Seeder
         $rol1->save();
 
         $rol2       = new Role();
-        $rol2->name = 'general';
+        $rol2->name = 'estudiante';
         $rol2->save();
 
         $usuario = new User();

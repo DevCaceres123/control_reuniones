@@ -25,5 +25,8 @@ class DatabaseSeeder extends Seeder
             LectorSeeder::class,
         ]);
 
+
+        User::factory(25)->create();
+
     }
 }

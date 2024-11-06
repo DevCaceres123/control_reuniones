@@ -217,6 +217,7 @@ class Controlador_usuario extends Controller
             return response()->json($this->mensaje, 200);
         }
 
+        $user->syncRoles([$nuevoRol->name]);
 
 
         $this->mensaje("exito", "Usuario reseteado correctamente");
