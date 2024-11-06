@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_reunion', function (Blueprint $table) {
             $table->id();
-            $table->string('manual');
-            $table->string('user_manual');
+            $table->string('manual')->nullable();
+            $table->string('user_manual')->nullable();
             $table->dateTime('entrada')->nullable();
             $table->dateTime('salida')->nullable();
             $table->unsignedBigInteger('user_id');

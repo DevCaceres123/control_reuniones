@@ -168,7 +168,7 @@
                 ?>
                 @foreach ($asistentes as $index => $registro)
                     <tr>
-                        <td>{{ $count + 1 }}</td>
+                        <td>{{ $count ++ }}</td>
                         <td>{{ $registro->ci ?? 'N/A' }}</td>
                         <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
                             {{ $registro->materno ?? 'N/A' }}</td>
@@ -194,7 +194,7 @@
 
                 @foreach ($noAsistentes as $index => $registro)
                     <tr>
-                        <td>{{ $count + 1 }}</td>
+                        <td>{{ $count ++ }}</td>
                         <td>{{ $registro->ci ?? 'N/A' }}</td>
                         <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
                             {{ $registro->materno ?? 'N/A' }}</td>
