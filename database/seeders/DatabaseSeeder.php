@@ -21,8 +21,10 @@ class DatabaseSeeder extends Seeder
         ]); */
 
         $this->call([
+            MesesSeeder::class,
             UsuarioSeeder::class,
             LectorSeeder::class,
+            
         ]);
 
 
