@@ -174,8 +174,15 @@
                         <td>{{ \Carbon\Carbon::parse($reunion->entrada)->format('Y-m-d') }}</td>
                         @foreach ($entradaSalidas as $item)
                             @if ($reunion->id === $item->reunion_id)
-                            <td>{{ \Carbon\Carbon::parse($item->entrada)->format('H:s:i') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($item->salida)->format('H:s:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->entrada)->format('H:i:s') ?? 'N/A' }}</td>
+                                @if ($item->salida == '')
+                                    <td></td>
+                                @else
+                                    <td>{{ \Carbon\Carbon::parse($item->salida)->format('H:i:s') ?? 'N/A' }}</td>
+                                @endif
+
+
+
                                 @if ($item->entrada != '' && $item->salida != '')
                                     <td>PRESENTE</td>
                                     <?php
