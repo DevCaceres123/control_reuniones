@@ -39,6 +39,6 @@
 
 @endsection
 
-@section('scripts')
+{{-- @section('scripts')
     <script src="{{ asset('js/modulos/reuniones/planificacion.js') }}" type="module"></script>
-@endsection
+@endsection --}}
