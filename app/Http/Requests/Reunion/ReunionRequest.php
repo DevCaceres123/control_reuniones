@@ -27,7 +27,7 @@ class ReunionRequest extends BasePrincipalRequest
         switch ($routeName) {
             case 'reuniones.store':
                 return [
-                    'titulo' => 'required|min:4',
+                    'titulo' => 'required|min:4|max:100',
                     'descripcion' => 'required|max:100',
                     'entrada' => 'required|date_format:H:i',
                     'salida' => 'required|date_format:H:i|after:entrada',

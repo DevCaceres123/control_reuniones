@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_reunion', function (Blueprint $table) {
             $table->id();
-            $table->string('manual')->nullable();
+            $table->string('manual',50)->nullable();
             $table->string('user_manual')->nullable();
             $table->dateTime('entrada')->nullable();
             $table->dateTime('salida')->nullable();

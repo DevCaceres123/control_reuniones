@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reuniones', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo',20);
-            $table->string('descripcion',100);
+            $table->string('titulo',100);
+            $table->string('descripcion',200);
             $table->string('estado',10);
             $table->dateTime('entrada');
             $table->dateTime('salida');
