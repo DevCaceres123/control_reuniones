@@ -21,7 +21,7 @@ class Controlador_pagarCuotas extends Controller
     {
         $meses = Mes::select('id', 'mes')->get();
         return view('administrador.pago.pagarCuotas', [
-            'meses' => $meses,
+            'meses' => $meses,            
         ]);
     }
 

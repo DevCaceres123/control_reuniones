@@ -91,4 +91,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Lector', 'user_id'); // Si user_id es la clave en la tabla lectores
     }
+
+    public function departemento(){
+        return $this->belongsTo('App\Models\Departamento');
+    }
+
+
 }

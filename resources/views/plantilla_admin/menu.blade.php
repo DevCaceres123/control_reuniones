@@ -88,9 +88,7 @@
                                     <a class="nav-link" href="{{ route('reuniones.index') }}">Planificacion de
                                         Reuniones</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('asistencias.index') }}">Control de Asistencia</a>
-                                </li>
+
 
                             </ul><!--end nav-->
                         </div><!--end startbarApplications-->
@@ -107,25 +105,44 @@
                             <ul class="nav flex-column">
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('cuotas.index') }}">Cuotas</a>
+                                    <a class="nav-link" href="{{ route('pagarCuotas.index') }}">Cuotas</a>
+                                </li>
+
+
+                            </ul><!--end nav-->
+                        </div><!--end startbarApplications-->
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reportes" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controreportes">
+                            <i class="far fa-folder-open menu-icon"></i>
+                            <span>REPORTES</span>
+                        </a>
+                        <div class="collapse " id="reportes">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('asistencias.index') }}">Reporte de
+                                        Asistencia</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('pagarCuotas.index') }}">Pagar Coutas</a>
+                                    <a class="nav-link" href="{{ route('cuotas.index') }}">Reporte de cuotas</a>
                                 </li>
 
                             </ul><!--end nav-->
                         </div><!--end startbarApplications-->
                     </li>
 
-                    
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('lectores.index') }}" role="button" aria-expanded="false"
-                                aria-controls="sidebarDashboards">
-                                <i class="fas fa-desktop menu-icon"></i>
-                                <span>LECTORES</span>
-                            </a>
-                        </li><!--end nav-item-->
-                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('lectores.index') }}" role="button" aria-expanded="false"
+                            aria-controls="sidebarDashboards">
+                            <i class="fas fa-desktop menu-icon"></i>
+                            <span>LECTORES</span>
+                        </a>
+                    </li><!--end nav-item-->
+
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="#sidebarElements" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarElements">

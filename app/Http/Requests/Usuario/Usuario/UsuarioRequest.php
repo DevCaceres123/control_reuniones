@@ -27,13 +27,15 @@ class UsuarioRequest extends BasePrincipalRequest
         switch ($routeName) {
             case 'usuarios.store':
                 return [
-                    'ci' => 'required|string|max:20|min:6|unique:users',
+                    'ci' => 'required|string|max:20|min:6',
                     'nombres' => 'required|string|max:255',
                     'paterno' => 'required|string|max:255',
                     'materno' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:users,email',
                     'role' => 'required|integer',
                     'cod_targeta' => 'nullable|unique:users,cod_targeta',
+                    'expedido' => 'required|integer',
+                    'complemento' => 'nullable:max:6',
                     'usuario' => 'required|string|min:6|unique:users',
                     'password' => 'required|string|min:8',
 

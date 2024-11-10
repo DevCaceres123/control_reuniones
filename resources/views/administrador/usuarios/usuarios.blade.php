@@ -8,7 +8,11 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">LISTA DE USUARIOS</h4>
+                            <h4 class="card-title">
+                               <span class="badge bg-danger fs-4">
+                                     LISTA DE USUARIOS
+                                </span>
+                            </h4>
                         </div>
                         @can('admin.usuario.crear')
                             <div class="col-auto">
@@ -115,24 +119,26 @@
 
                                                 </td>
                                                 <td class="text-end">
-                                                    @can('admin.usuario.reset')
-                                                        <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario"
+                                                    <div class="d-flex justify-content-between">
+                                                        @can('admin.usuario.reset')
+                                                            <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario"
+                                                                data-id="{{ $usuario->id }}">
+                                                                <i class="fas fa-redo fs-16"></i>
+
+                                                            </a>
+                                                        @endcan
+
+                                                        <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
                                                             data-id="{{ $usuario->id }}">
-                                                            <i class="fas fa-redo fs-16"></i>
+                                                            <i class="far fa-edit fs-16"></i>
 
                                                         </a>
-                                                    @endcan
+                                                        <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
+                                                            data-id="{{ $usuario->id }}">
+                                                            <i class="fas fa-id-card fs-16"></i>
 
-                                                    <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
-                                                        data-id="{{ $usuario->id }}">
-                                                        <i class="far fa-edit fs-16"></i>
-
-                                                    </a>
-                                                    <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
-                                                        data-id="{{ $usuario->id }}">
-                                                        <i class="fas fa-id-card fs-16"></i>
-
-                                                    </a>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -164,7 +170,7 @@
                 <div class="modal-body">
                     <form id="formularioUsuario">
                         <div class="row">
-                            <div class="form-group py-2 col-md-6">
+                            <div class="form-group py-2 col-md-8">
                                 <label for="" class="form-label">DOCUMENTO DE IDENTIDAD</label>
                                 <div class="">
                                     <input type="text" class="form-control rounded" placeholder="CI/Pasaporte"
@@ -174,7 +180,38 @@
 
                             </div>
 
-                            <div class="form-group py-2 col-md-6">
+                            <div class="form-group py-2 col-md-4">
+                                <label for="nombre_socio" class="form-label">COMPLEMENTO</label>
+                                <div class="" id="group_nombre_usuario">
+                                    <input type="text" class="form-control rounded" name="complemento" id="complemento"
+                                        placeholder="" style="">
+                                    <div id="_complemento"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group py-2 col-md-4">
+                                <label for="nombre_socio" class="form-label">EXPEDIDO</label>
+                                <div class="" id="group_nombre_usuario">
+                                    <select name="expedido" id="expedido" class="form-control  rounded">
+                                        <option disabled selected>Expedido</option>
+
+                                        @foreach ($departamentos as $departamento)
+                                            <option class="text-uppercase" value={{ $departamento->id }}>
+                                                {{ $departamento->departamento }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    <div id="_expedido"></div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                            <div class="form-group py-2 col-md-8">
                                 <label for="nombre_socio" class="form-label">NOMBRE</label>
                                 <div class="" id="group_nombre_usuario">
                                     <input type="text" class="form-control rounded" name="nombres" id="nombres"
@@ -304,7 +341,7 @@
                                 <label for="" class="form-label">Nº TARGETA</label>
                                 <div class="">
                                     <input type="hidden" id="id_usuario_targeta" name="id_usuario_targeta">
-                                    <input type="text" class="form-control rounded" placeholder="Codigo de targeta"
+                                    <input type="text" class="form-control rounded" placeholder=""
                                         name="codigo_targeta" id="codigo_targeta"
                                         style="text-transform:uppercase;background-color: #f0f0f0;">
                                 </div>

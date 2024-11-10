@@ -19,7 +19,7 @@ class Controlador_cuotas extends Controller
      */
     public function index()
     {
-        return view('administrador.pago.cuotas', []);
+        return view('administrador.reporte.reporteCuotas', []);
     }
 
     /**

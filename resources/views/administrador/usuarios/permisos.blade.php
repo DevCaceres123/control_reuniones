@@ -7,7 +7,11 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">Permisos</h4>
+                            <h4 class="card-title">
+                                <span class="badge bg-danger fs-4">
+                                    LISTA DE PERMISOS
+                                </span>
+                            </h4>
                         </div>
                         <div class="col-auto">
                             <button class="btn btn-primary" onclick="abrirModalPermiso()">
@@ -135,7 +139,8 @@
             let datos = Object.fromEntries(new FormData(form_permiso).entries());
 
             // Definimos la URL y el método de la solicitud dependiendo de si estamos creando o editando un permiso
-            let url = datos.permiso_id ? `{{ route('permisos.update', ':id') }}`.replace(':id', datos.permiso_id) : "{{ route('permisos.store') }}";
+            let url = datos.permiso_id ? `{{ route('permisos.update', ':id') }}`.replace(':id', datos
+                .permiso_id) : "{{ route('permisos.store') }}";
             let method = datos.permiso_id ? "PUT" : "POST";
 
             // Deshabilitamos el botón de guardar mientras se realiza la solicitud y mostramos un mensaje de "Guardando..."

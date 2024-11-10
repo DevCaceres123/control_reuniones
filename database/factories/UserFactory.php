@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Departamento;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
@@ -28,6 +29,7 @@ class UserFactory extends Factory
             'email'=>$this->faker->email(),                   
             'estado' => "activo",
             'cod_targeta' => $this->faker->randomNumber(9, true),
+            'departamento_id'=>Departamento::inRandomOrder()->first(),
         ];
     }
 

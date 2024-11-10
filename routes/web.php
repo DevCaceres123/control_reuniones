@@ -67,25 +67,15 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
         Route::post('/nueva_asistencia', 'nueva_asistencia')->name('reuniones.nueva_asistencia');
     });
 
-    // asistencia
-    Route::controller(Controlador_asistencia::class)->group(function () {
-
-        Route::resource('/asistencias', Controlador_asistencia::class);
-        Route::post('/reporte_asistencia','reporte_asistencia')->name('asistencia.reporte_asistencia');
-    });
-
-
     // PARA LOS PAGOS
-    Route::controller(Controlador_cuotas::class)->group(function () {
-
-        Route::resource('/cuotas', Controlador_cuotas::class);
-    });
 
     Route::controller(Controlador_pagarCuotas::class)->group(function () {
 
         Route::resource('/pagarCuotas', Controlador_pagarCuotas::class);
     });
-    
+
+
+
 
     // PARA LOS LECTORES
     Route::controller(Controlador_lectores::class)->group(function () {
@@ -93,5 +83,22 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
         Route::resource('/lectores', Controlador_lectores::class);
         Route::put('/lectores/terminar_uso/{id_lector}', 'terminar_uso');
         Route::put('/lectores/actualizar_lector/{id_lector}', 'actualizar_lector');
+    });
+
+
+    // REPORTES
+
+    // asistencia
+    Route::controller(Controlador_asistencia::class)->group(function () {
+
+        Route::resource('/asistencias', Controlador_asistencia::class);
+        Route::post('/reporte_asistencia', 'reporte_asistencia')->name('asistencia.reporte_asistencia');
+    });
+
+    // cuotas    
+
+    Route::controller(Controlador_cuotas::class)->group(function () {
+
+        Route::resource('/cuotas', Controlador_cuotas::class);
     });
 });

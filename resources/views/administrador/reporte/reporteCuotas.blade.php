@@ -6,8 +6,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
-                        <div class="col">
-                            <h4 class="card-title text-center">REVISAR PAGOS</h4>
+                        <div class="col text-center">
+                            <p class="card-title">
+                                <span class="badge bg-danger fs-5">
+                                    REPORTE DE CUOTAS
+                                </span>
+                            </p>
                         </div>
                         @if ($errors->has('ci_estudiante'))
                             <div class="alert alert-danger">

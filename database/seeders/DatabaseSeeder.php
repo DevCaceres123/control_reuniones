@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Departamento;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,11 +25,11 @@ class DatabaseSeeder extends Seeder
             MesesSeeder::class,
             UsuarioSeeder::class,
             LectorSeeder::class,
-            
+            DepartamentoSeeder::class,
         ]);
 
 
-        User::factory(25)->create();
+        User::factory(10)->create();
 
     }
 }

@@ -11,12 +11,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class Controlador_asistencia extends Controller
 {
+    
+    public $mensaje = [];
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('administrador.reunion.asistencia', []);
+        return view('administrador.reporte.reporteAsistencia');
     }
 
     /**
@@ -85,9 +87,20 @@ class Controlador_asistencia extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $user_id)
     {
-        //
+        $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $user_id)->role('estudiante')->get();
+        if ($user_estudiante->isEmpty()) {
+
+            $this->mensaje("error", null);
+
+            return response()->json($this->mensaje, 200);
+        }
+
+
+        $this->mensaje("exito", $user_estudiante);
+
+        return response()->json($this->mensaje, 200);
     }
 
     /**
@@ -112,5 +125,15 @@ class Controlador_asistencia extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function mensaje($titulo, $mensaje)
+    {
+
+        $this->mensaje = [
+            'tipo' => $titulo,
+            'mensaje' => $mensaje
+        ];
     }
 }

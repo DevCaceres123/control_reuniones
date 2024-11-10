@@ -8,7 +8,11 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">LISTA DE ROLES</h4>
+                            <h4 class="card-title">
+                                <span class="badge bg-danger fs-4">
+                                     ROLES
+                                </span>
+                            </h4>
                         </div>
                         <div class="col-auto">
                             <button class="btn btn-primary" onclick="abrirModalRol()">
@@ -310,8 +314,8 @@
             })
         }
 
-        let rolNombre       = document.getElementById('rolNombre');
-        let permisoListar   = document.getElementById('permisoListar');
+        let rolNombre = document.getElementById('rolNombre');
+        let permisoListar = document.getElementById('permisoListar');
         async function vizualizarRolPermiso(id) {
             permisoListar.innerHTML = '';
             try {
@@ -324,7 +328,7 @@
                 });
 
                 let data = await response.json();
-                if(data.tipo === 'success'){
+                if (data.tipo === 'success') {
                     modal_vizualizar.show();
                     rolNombre.innerHTML = data.mensaje.rol;
                     data.mensaje.permisos.forEach(elem => {
@@ -333,7 +337,7 @@
                         `;
                     });
                 }
-                if(data.tipo === 'error'){
+                if (data.tipo === 'error') {
                     alerta_top(data.tipo, data.mensaje);
                 }
 

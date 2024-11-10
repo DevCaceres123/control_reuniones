@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Perfil\UpdatePasswordRequest;
 use App\Http\Requests\Usuario\Rol\UpdateRolRequest;
 use App\Http\Requests\Usuario\Usuario\UsuarioRequest;
+use App\Models\Departamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\registro_lector;
@@ -33,13 +34,14 @@ class Controlador_usuario extends Controller
 
         $usuarios = User::with('roles')->get();
         $roles = Role::select('id', 'name')->get();
-
+        $departamentos = Departamento::select('id', 'expedido', 'departamento')->get();
         // Obtener el ID del usuario autenticado
         // $userId = auth()->user()->id; // O también puedes usar Auth::id();
         // $role = Auth::user()->getRoleNames(); // Devuelve una colección con los nombres de los roles
         return view('administrador.usuarios.usuarios', [
             'usuarios'  => $usuarios,
             'roles'  => $roles,
+            'departamentos' => $departamentos,
         ]);
     }
 
@@ -78,16 +80,29 @@ class Controlador_usuario extends Controller
 
         DB::beginTransaction();
 
+
         try {
+            $ci=$request->ci.$request->complemento;
+            $respuesta = User::select('id')->where('ci', $ci)->first();
+            if ($respuesta) {
+                throw new \Exception(" ci ya registrado");
+            }
+
             // Crear un nuevo usuario
             $usuario = new User();
-            $usuario->ci = $request->ci;
+            if ($request->complemento != null) {
+                $usuario->ci = $request->ci . "-" . $request->complemento;
+            } else {
+                $usuario->ci = $request->ci;
+            }
+
             $usuario->nombres = $request->nombres;
             $usuario->paterno = $request->paterno;
             $usuario->materno = $request->materno;
             $usuario->email = $request->email;
             $usuario->estado = "activo";
             $usuario->cod_targeta = $request->cod_targeta;
+            $usuario->departamento_id = $request->expedido;
             $usuario->usuario = $request->usuario;
             $usuario->password = bcrypt($request->password);
             // $usuario->rol = $request->usuario_edad;

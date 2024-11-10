@@ -6,6 +6,7 @@ let tablaUser;
 
 let ciUsuario = document.getElementById("ci");
 let nombreUsuario = document.getElementById("nombres");
+let complemento = document.getElementById("complemento");
 
 
 $(document).ready(function () {
@@ -13,7 +14,7 @@ $(document).ready(function () {
         processing: true,
         responsive: true,
     });
-    //listar_usuarios();
+    // listar_usuarios();
 });
 
 
@@ -65,10 +66,12 @@ function listar_usuarios() {
                     }
                 },
                 {
-                    data: 'ci',
+                    data: null,
                     className: 'table-td',
-                    render: function (data) {
-                        return `<b class="text-muted">${data}</b>`;
+                    render: function (data, type, row) {
+
+                        return `<b class="text-muted">${row.ci}</b>`;
+
                     }
                 },
                 {
@@ -121,6 +124,7 @@ function listar_usuarios() {
                         return `
                             <div class="text-end">
                                 <td>
+                                 <div class="d-flex justify-content-between">
                                     ${permissions['reset'] ? // Verificar permiso para resetear usuario
                                 `<a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
                                             <i class="fas fa-redo fs-16"></i>
@@ -135,6 +139,7 @@ function listar_usuarios() {
                                      <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
                                         <i class="fas fa-id-card fs-16"></i>
                                     </a>
+                                 </div>   
                                 </td>
                             </div >
                 `;
@@ -191,13 +196,14 @@ $('#obtnerTargeta').click(function (e) {
     e.preventDefault();
     let id_alumno = 0;
     crud("admin/usuarios", "GET", id_alumno, null, function (error, response) {
-
+        // console.log(response);
         if (error != null) {
             mensajeAlerta(error, "error");
             return;
         }
+       
         if (response.tipo != "exito") {
-            $('#cod_targeta').val(response.mensaje);
+            $('#cod_targeta').attr('placeholder',response.mensaje);
             return;
         }
 
@@ -272,8 +278,8 @@ $('#formEditarRol').submit(function (e) {
             return;
         }
         mensajeAlerta(response.mensaje, response.tipo);
-       
-        
+
+
         listar_usuarios();
         vaciar_formulario("formEditarRol");
         $('#ModalRol').modal('hide');
@@ -456,7 +462,16 @@ $('#alumno_form_nuevo').submit(function (e) {
 // Esta funcion es para generar el nombre usaurio
 function generarUsuario() {
 
-    $('#usuario').val(ciUsuario.value.replace(/\s/g, ""));
+    console.log(complemento.value);
+
+    if (complemento.value != "") {
+        $('#usuario').val(ciUsuario.value.replace(/\s/g, "") + "-" + complemento.value.replace(/\s/g, ""));
+    } else {
+        $('#usuario').val(ciUsuario.value.replace(/\s/g, ""));
+    }
+
+
+
 }
 
 function generarContraseña() {

@@ -9,7 +9,11 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">LISTA DE REUNIONES</h4>
+                            <h4 class="card-title">
+                                <span class="badge bg-danger fs-4">
+                                    LISTA DE REUNIONES
+                                </span>
+                            </h4>
                         </div>
 
                         <div class="col-auto">
