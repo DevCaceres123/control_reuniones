@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class Controlador_cuotas extends Controller
 {
     public $mensaje = [];
@@ -36,37 +37,49 @@ class Controlador_cuotas extends Controller
     public function store(Request $request)
     {
         $anio_actual = Carbon::now()->year;
-      
-            $user = User::select('id', 'ci' , 'nombres' ,'paterno','materno')->where('ci', $request->ci_estudiante)->first();
 
-            $pagos = Pago::where('estudiante_id', $user->id)
-                ->whereYear('fecha_pago', $anio_actual) // Suponiendo que 'fecha_pago' es el campo de la fecha en la tabla
-                ->get();
+        $user = User::select('id', 'ci', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
 
-            $meses = Mes::all();
-            // Obtener solo los IDs de los meses pagados
-            $mesesPagadosIds = $pagos->pluck('mes_id')->toArray();
-
-            // Filtrar los meses pagados usando los IDs
-            $mesesPagados = $meses->whereIn('id', $mesesPagadosIds);
-
-            // Filtrar los meses no pagados usando los IDs
-            $mesesNoPagados = $meses->whereNotIn('id', $mesesPagadosIds);
-
-            $pdf = Pdf::loadView('administrador/pdf/reporteCuotasPagadas',compact('user','mesesPagados','mesesNoPagados'));
-            return $pdf->stream();
-
-           
-            
+        if (!$user) {
+            return redirect()->back()->withErrors(['ci_estudiante' => 'cedeula de indentidad no encontrada']);
+        }
         
+
+        $pagos = Pago::where('estudiante_id', $user->id)
+            ->whereYear('fecha_pago', $anio_actual) // Suponiendo que 'fecha_pago' es el campo de la fecha en la tabla
+            ->get();
+
+        $meses = Mes::all();
+        // Obtener solo los IDs de los meses pagados
+        $mesesPagadosIds = $pagos->pluck('mes_id')->toArray();
+
+        // Filtrar los meses pagados usando los IDs
+        $mesesPagados = $meses->whereIn('id', $mesesPagadosIds);
+
+        // Filtrar los meses no pagados usando los IDs
+        $mesesNoPagados = $meses->whereNotIn('id', $mesesPagadosIds);
+
+        $pdf = Pdf::loadView('administrador/pdf/reporteCuotasPagadas', compact('user', 'mesesPagados', 'mesesNoPagados'));
+        return $pdf->stream();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $user_id)
     {
-        //
+        $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $user_id)->role('estudiante')->get();
+        if ($user_estudiante->isEmpty()) {
+
+            $this->mensaje("error", null);
+
+            return response()->json($this->mensaje, 200);
+        }
+
+
+        $this->mensaje("exito", $user_estudiante);
+
+        return response()->json($this->mensaje, 200);
     }
 
     /**

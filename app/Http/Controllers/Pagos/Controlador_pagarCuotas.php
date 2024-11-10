@@ -21,7 +21,7 @@ class Controlador_pagarCuotas extends Controller
     {
         $meses = Mes::select('id', 'mes')->get();
         return view('administrador.pago.pagarCuotas', [
-            'meses' => $meses,            
+            'meses' => $meses,
         ]);
     }
 
@@ -79,39 +79,21 @@ class Controlador_pagarCuotas extends Controller
     {
         try {
 
+            $anioActual = Carbon::now()->format('Y');
             $pago = Pago::where('estudiante_id', $estudiante_id)
                 ->where('mes_id', $mes_id)
+                ->whereYear('fecha_pago', $anioActual)
                 ->first();
             if (!$pago) {
                 return "correcto";
             }
-
-            $verificarAnio = $this->verificarAnioDePAgo($pago->id);
-
-            if ($verificarAnio != "correcto") {
-                throw new \Exception("ya se registro ese pago");
-            }
-
-            return "correcto";
+            return "error";
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
 
-    public function verificarAnioDePAgo($pago_id)
-    {
-
-        $añoActual = Carbon::now()->format('Y');
-
-        $pago = Pago::find($pago_id);
-        $fecha_pago = Carbon::parse($pago->fecha_pago)->format('Y');
-
-        if ($añoActual === $fecha_pago) {
-            return "error";
-        } else {
-            return "correcto";
-        }
-    }
+ 
 
     /**
      * Display the specified resource.

@@ -41,7 +41,9 @@
                                             required>
                                     </div>
                                     <div class="mt-2">
-                                        <button type="submit" class="btn btn-success btn-sm" disabled id="buton_ReporteAsistencia">Generar reporte</button>
+                                        <button type="submit" class="btn btn-success  px-2 d-inline-flex align-items-center" disabled
+                                            id="buton_ReporteAsistencia"><i class="far fa-file-pdf fs-20 me-1"></i>Generar
+                                            reporte</button>
                                     </div>
                                 </div>
                             </form>
@@ -65,7 +67,7 @@
 
                         <p class="mt-1">
                             <strong class=" text-uppercase" id="nombre_apellido_res">
-                              
+
                             </strong>
                         </p>
 
