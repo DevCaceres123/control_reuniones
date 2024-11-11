@@ -16,64 +16,72 @@
     <link href="{{ asset('admin_template/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin_template/css/app.min.css') }}" rel="stylesheet" type="text/css" />
 
+    {{-- login csss --}}
+
+    <link href="{{ asset('assets/login.css') }}" rel="stylesheet" type="text/css" />
+
 </head>
 
 <!-- Top Bar Start -->
+
 <body>
-    <div class="container-xxl">
-        <div class="row vh-100 d-flex justify-content-center">
-            <div class="col-12 align-self-center">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4 mx-auto">
-                            <div class="card">
-                                <div class="card-body p-0 bg-black auth-header-box rounded-top">
-                                    <div class="text-center p-3">
-                                        <a href="index.html" class="logo logo-admin">
-                                            <img src="{{ asset('admin_template/images/logo-sm.png') }}" height="50"
-                                                alt="logo" class="auth-logo">
-                                        </a>
-                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">LOGIN</h4>
-                                    </div>
-                                </div>
 
-                                <div class="card-body pt-0">
-                                    <div class="text-center py-2" id="mensaje_error"></div>
-                                    <form id="formulario_login" autocomplete="off">
-                                        @csrf
-                                        <div class="form-group mb-2">
-                                            <label class="form-label" for="usuario">Usuario</label>
-                                            <input type="text" class="form-control" id="usuario" name="usuario"
-                                                placeholder="Ingrese usuario">
-                                        </div><!--end form-group-->
 
-                                        <div class="form-group">
-                                            <label class="form-label" for="password">Password</label>
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                placeholder="Ingrese la contraseña">
-                                        </div><!--end form-group-->
-                                    </form>
+    <div class="contenedor_fondo">
+        <div class="contenedor_fondo-img slider">
 
-                                    <div class="form-group mb-0 row">
-                                        <div class="col-12">
-                                            <div class="d-grid mt-3">
-                                                <button class="btn btn-primary" type="button"
-                                                    id="btn_ingresar_usuario">INGRESAR <i
-                                                        class="fas fa-sign-in-alt ms-1"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
+        </div>
+        <div class="contenedor_login">
 
-                                </div>
-                            </div>
-                        </div>
+
+            <div class="contenedor_login-logo">
+                <img src="{{ asset('assets/logo_cruz.png') }}" alt="">
+            </div>
+
+            <div class="contenedor_login-formulario-carusel">
+
+                <div class="contenedor-carusel">
+                    <div class="contenedor-carusel-titulo-descripcion">
+
+                        <h3> <u>Iglesia Luz de Vida</u> </h3>
+
+                        <p>Predicar el evangelio de Jesucristo a las personas de la comunidad moldeando vidas y formando
+                            lideres comprometidos para la gloria de Dios. (Mateo 9:35)</p>
+
+
+                    </div>
+                    <div class="slider-wrap">
+                        <div class="single-slide slider" id="slide-1"></div>
+                        <div class="single-slide slider" id="slide-2"></div>
+                        <div class="single-slide slider" id="slide-3"></div>
+                        <div class="single-slide slider" id="slide-4"></div>
+                        <div class="single-slide slider" id="slide-5"></div>
+
                     </div>
                 </div>
+
+                <div class="contenedor-formulario">
+
+                    <form class="formulario-login" id="formulario_login" autocomplete="off">
+                        @csrf
+                        <h2><strong>Iniciar Session</strong></h2>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="usuario" name="usuario">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password">
+                        </div>
+                        <button type="button" class="boton btn_formulario" id="btn_ingresar_usuario">Ingresar</button>
+                        <div class="text-center py-2 text-light" id="mensaje_error"></div>
+                    </form>
+                </div>
+
+
             </div>
         </div>
     </div>
-
-
 
 </body>
 
@@ -91,10 +99,10 @@
         let color = tipo === 'success' ? 'success' : 'danger';
         mensajeError.innerHTML = `
         <div class="alert alert-${color} shadow-sm border-theme-white-2" role="alert">
-            <div class="d-inline-flex justify-content-center align-items-center thumb-xs bg-${color} rounded-circle mx-auto me-1">
-                <i class="fas ${iconoClase} align-self-center mb-0 text-white"></i>
+            <div class="d-inline-flex justify-content-center align-items-center thumb-xs bg-${color} rounded-circle mx-auto me-1 ">
+                <i class="fas ${iconoClase} align-self-center mb-0 text-light"></i>
             </div>
-            <strong>${mensaje}</strong>
+            <strong class="text-light">${mensaje}</strong>
         </div>
         `;
         // Configurar el temporizador para ocultar la alerta después de 5 segundos
