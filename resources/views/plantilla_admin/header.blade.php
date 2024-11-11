@@ -4,14 +4,24 @@
         <nav class="topbar-custom d-flex justify-content-between" id="topbar-custom">
 
 
-            <ul class="topbar-item list-unstyled d-inline-flex align-items-center mb-0">
+            <ul class="topbar-item list-unstyled d-inline-flex align-items-center ">
                 <li>
                     <button class="nav-link mobile-menu-btn nav-icon" id="togglemenu">
                         <i class="iconoir-menu-scale"></i>
                     </button>
                 </li>
-                <li class="mx-3 welcome-text">
-                    <h3 class="mb-0 fw-bold text-truncate">SIST ADMIN {{ Auth::user()->nombres }}</h3>
+                <li class="mx-3 welcome-text d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0 fw-bold text-center text-uppercase text-light p-2 rounded bg-success me-1">Iglesia
+                        presbiteriana luz de vida
+
+                    </h3>
+                    <img src="{{ asset('admin_template/images/logo_mundo.png') }}" alt="" alt="logo-small"
+                        class="logo-sm rounded-pill ms-3" width="60" height="60">
+                    <!-- <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6> -->
+                </li>
+                <li class="mx-5 welcome-text ">
+                    <h5 class="mb-0 fw-bold text-truncate text-capitalize text-center mt-1">Bienvenido
+                        {{ Auth::user()->nombres }} !</h5>
                     <!-- <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6> -->
                 </li>
             </ul>

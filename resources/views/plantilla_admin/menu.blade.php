@@ -1,15 +1,12 @@
 <div class="startbar d-print-none">
     <!--start brand-->
     <div class="brand">
-        <a href="index.html" class="logo">
+        <a href="" class="logo">
             <span>
-                <img src="{{ asset('admin_template/images/logo-sm.png') }}" alt="logo-small" class="logo-sm">
+                <img src="{{ asset('admin_template/images/logo_cruz.png') }}" alt="logo-small" class="logo-sm">
             </span>
             <span class="">
-                <img src="{{ asset('admin_template/images/logo-light.png') }}" alt="logo-large"
-                    class="logo-lg logo-light">
-                <img src="{{ asset('admin_template/images/logo-dark.png') }}" alt="logo-large"
-                    class="logo-lg logo-dark">
+                
             </span>
         </a>
     </div>

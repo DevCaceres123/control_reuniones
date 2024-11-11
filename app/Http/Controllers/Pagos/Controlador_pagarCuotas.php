@@ -38,28 +38,37 @@ class Controlador_pagarCuotas extends Controller
      */
     public function store(Request $request)
     {
-
-        DB::beginTransaction();
+       
         try {
+            if ($request->meses == null) {
+                throw new \Exception("seleccione un mes de pago");
+            }
             $user = User::select('id', 'ci')->where('ci', $request->ci_estudiante)->first();
 
 
             if (!$user) {
                 throw new \Exception(" estudiante no encontrado");
             }
-            $respuesta = $this->verificarPago($user->id, $request->meses);
 
-            if ($respuesta != "correcto") {
-                throw new \Exception(" ya se registro ese pago");
+            foreach ($request->meses as $key => $mes) {
+
+                $respuesta = $this->verificarPago($user->id, $mes);
+
+                if ($respuesta != "correcto") {
+                    throw new \Exception("ya se registro ese pago");
+                }
+
+                $pago = new Pago();
+                $pago->titulo = "pagado";
+                $pago->fecha_pago = Carbon::now();
+                $pago->monto = "10";
+                $pago->mes_id = $mes;
+                $pago->estudiante_id = $user->id;
+                $pago->id_usuario = auth()->user()->id;
+                $pago->save();
             }
-            $pago = new Pago();
-            $pago->titulo = "pagado";
-            $pago->fecha_pago = Carbon::now();
-            $pago->monto = "10";
-            $pago->mes_id = $request->meses;
-            $pago->estudiante_id = $user->id;
-            $pago->id_usuario = auth()->user()->id;
-            $pago->save();
+
+
             DB::commit();
 
             $this->mensaje("exito", "Pago registrado correctamente");
@@ -69,7 +78,7 @@ class Controlador_pagarCuotas extends Controller
             // Revertir los cambios si hay algún error
             DB::rollBack();
 
-            $this->mensaje("error", "error" . $e->getMessage());
+            $this->mensaje("error", "error " . $e->getMessage());
 
             return response()->json($this->mensaje, 200);
         }
@@ -93,16 +102,54 @@ class Controlador_pagarCuotas extends Controller
         }
     }
 
- 
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(string $user_id)
+    {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
+        $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $user_id)->role('estudiante')->first();
+
+
+        if (!$user_estudiante) {
+
+            $this->mensaje("error", "estudiante no encontrado");
+
+            return response()->json($this->mensaje, 200);
+        }
+
+        $anio_actual = Carbon::now()->year;
+
+
+        $pagos = Pago::where('estudiante_id', $user_estudiante->id)
+            ->whereYear('fecha_pago', $anio_actual) // Suponiendo que 'fecha_pago' es el campo de la fecha en la tabla
+            ->get();
+
+        $meses = Mes::all();
+        // Obtener solo los IDs de los meses pagados
+        $mesesPagadosIds = $pagos->pluck('mes_id')->toArray();
+
+
+        // Filtrar los meses no pagados usando los IDs
+        $mesesNoPagados = $meses->whereNotIn('id', $mesesPagadosIds);
+
+
+        $mesesParseado = array_values($mesesNoPagados->toArray());
+
+        $datosPago=[
+            'meses'=>$mesesParseado,
+            'estudiante'=>$user_estudiante,
+        ];
+
+        $this->mensaje("exito", $datosPago);
+
+        return response()->json($this->mensaje, 200);
+    }
+
+
     public function edit(string $id)
     {
         //

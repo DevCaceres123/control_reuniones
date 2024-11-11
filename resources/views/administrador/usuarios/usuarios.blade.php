@@ -35,7 +35,7 @@
                                             <th>CI</th>
                                             <th>ROL</th>
                                             <th>ESTADO</th>
-                                            <th>COD.TARGETA</th>
+                                            <th>COD.TARJETA</th>
                                             <th class="text-end">ACCION</th>
                                         </tr>
                                     </thead>

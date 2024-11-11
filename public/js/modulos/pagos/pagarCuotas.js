@@ -4,7 +4,7 @@ import { vaciar_errores, vaciar_formulario } from '../../../funciones_helper/vis
 
 $('#form_pagarCuotas').submit(function (e) {
     e.preventDefault();
-    
+
     Swal.fire({
         title: "NOTA!",
         text: "¿Está seguro de registrar el pago?",
@@ -17,7 +17,7 @@ $('#form_pagarCuotas').submit(function (e) {
     }).then(async function (result) {
         if (result.isConfirmed) {
 
-            let datos=$('#form_pagarCuotas').serialize();
+            let datos = $('#form_pagarCuotas').serialize();
             crud("admin/pagarCuotas", "POST", null, datos, function (error, response) {
 
                 // console.log(response);
@@ -44,3 +44,70 @@ $('#form_pagarCuotas').submit(function (e) {
         }
     })
 });
+
+
+
+
+// BUSCAR ESTUDIANTE POR CI
+$('#ci_estudiante').keyup(function () {
+    let ci_estudiante = $(this).val(); // Captura el valor actual del campo de entrada
+
+
+    if (ci_estudiante.length < 6) {
+
+        $("#buton_PagarCuota").prop("disabled", true);
+        $('#mesesPagados').html("");
+        return;
+    }
+
+    crud("admin/pagarCuotas", "GET", ci_estudiante, null, function (error, response) {
+
+        console.log(response);
+        // Verificamos que no haya un error o que todos los campos sean llenados
+        if (response.tipo === "errores") {
+
+            mensajeAlerta(response.mensaje, "errores");
+            $('#nombre_apellido_res').text("no encontrado...");
+            return;
+        }
+        if (response.tipo != "exito") {
+            $('#nombre_apellido_res').text("no encontrado...");
+            $("#buton_PagarCuota").prop("disabled", true);
+            $('#mesesPagados').html("");
+            return;
+        }
+
+        $("#buton_PagarCuota").prop("disabled", false);
+
+
+        let elemento = "";
+        response.mensaje.meses.forEach(element => {
+            elemento += `
+
+             <div class="col-12 col-md-6">
+                <div class="form-check d-flex justify-content-between align-items-center mt-2">
+                    <label class="form-check-label me-3" for="enero">${element.mes}</label>
+                        <input class="form-check-input" type="checkbox" id="${element.mes}"
+                                        name="meses[]" value="${element.id}"  style="border-color: #007bff">
+                </div>
+             </div>
+            `;
+
+        });
+
+        let nombreCompleto= response.mensaje.estudiante.nombres+" "+response.mensaje.estudiante.paterno+" "+response.mensaje.estudiante.materno;
+        $('#nombre_apellido_res').text(nombreCompleto);
+        $('#mesesPagados').html(elemento);
+
+    })
+});
+
+
+
+
+
+$('#select_all').on('change', function () {
+    // Cambia el estado de todos los checkboxes dentro de #form_rol
+    $('#form_pagarCuotas input[type="checkbox"]').prop('checked', this.checked);
+});
+
