@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Login\UsuarioRequest;
+use App\Models\Pago;
+use App\Models\Reunion;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -94,8 +97,33 @@ class Controlador_login extends Controller
     {
         $data['menu']   = 0;
         // Obtener el usuario autenticado
-       
+
+        // USUARIOS
+        $userActivo = User::where('estado', 'activo')->count();
+        $userInactivo = User::where('estado', 'inactivo')->count();
+        $data['usuariosActivos'] = $userActivo;
+        $data['usuariosInactivos'] = $userInactivo;
+
+
+        // PAGOS O CUOTAS
+
+        $mesActual = Carbon::now(); // Obtiene la fecha actual
+        $nombreMes = $mesActual->translatedFormat('F'); // Obtiene el nombre del mes en español
+        $pagosDelMes = Pago::whereMonth('fecha_pago', $mesActual->month)->count();
+
+        $data['nombreMes'] = ucfirst($nombreMes); // Capitaliza la primera letra del mes
+        $data['pagosDelMes'] = $pagosDelMes;
+
+        // REUNION
+        $reunion = Reunion::select('entrada')
+            ->where('estado', 'activo')->first();
+
+        $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
+
         
+
+        $data['mesReunion'] = $mesReunion;
+
         return view('inicio', $data);
     }
     /**
