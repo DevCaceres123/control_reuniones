@@ -95,6 +95,8 @@ class Controlador_login extends Controller
      */
     public function inicio()
     {
+
+
         $data['menu']   = 0;
         // Obtener el usuario autenticado
 
@@ -118,13 +120,73 @@ class Controlador_login extends Controller
         $reunion = Reunion::select('entrada')
             ->where('estado', 'activo')->first();
 
-        $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
+        if ($reunion) {
+            $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
+            $data['mesReunion'] = $mesReunion;
+        }
 
-        
 
-        $data['mesReunion'] = $mesReunion;
 
+        $data['datosAsistencia'] = $this->asistencia();
         return view('inicio', $data);
+    }
+
+
+
+    public function asistencia()
+    {
+
+        $total_estudiantes = User::select('id', 'nombres', 'paterno', 'materno')->role('estudiante')->count();
+        $total_reuniones = Reunion::select('id')->count();
+        $estudiantes_reunion = Reunion::withCount(['users' => function ($query) {
+            $query->where('entrada', '!=', null)
+                ->where('salida', '!=', null);
+        }])
+            ->get();
+        $asitencia = 0;
+        foreach ($estudiantes_reunion as $value) {
+            $asitencia = $value->users_count + $asitencia;
+        }
+
+
+        $estudiantes_reunion = Reunion::withCount(['users' => function ($query) {
+            $query->where('entrada', '=', null)
+                ->orWhere('salida', '=', null);
+        }])
+            ->get();
+        $observado = 0;
+        foreach ($estudiantes_reunion as $value) {
+            $observado = $value->users_count + $observado;
+        }
+
+
+
+        // Filtrar los estudiantes que no asistieron
+        $reuniones_con_ausentes = Reunion::withCount('users')
+            ->get()
+            ->map(function ($reunion) use ($total_estudiantes) {
+                $reunion->estudiantes_ausentes_count = $total_estudiantes - $reunion->users_count;
+                return $reunion;
+            });
+
+        $noAsistio = 0;
+        foreach ($reuniones_con_ausentes as $value) {
+            $noAsistio = $value->estudiantes_ausentes_count + $noAsistio;
+        }
+        if ($total_estudiantes == 0 || $total_reuniones == 0) {
+            return [
+                'asistencia' => 100,
+                'observado' => 0,
+                'noAsistio' => 0,
+            ];
+        }
+        $total_porcentaje = $total_estudiantes * $total_reuniones;
+
+        return [
+            'asistencia' => round($asitencia / $total_porcentaje * 100, 0),
+            'observado' => round($observado / $total_porcentaje * 100, 0),
+            'noAsistio' => round($noAsistio / $total_porcentaje * 100, 0),
+        ];
     }
     /**
      * FIN PARA INGRESAR AL INICIO

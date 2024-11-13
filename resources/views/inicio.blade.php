@@ -1,5 +1,8 @@
 @extends('principal')
 @section('titulo', 'INICIO')
+@section('estilos')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@endsection
 @section('contenido')
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
@@ -70,7 +73,7 @@
                         <div class="col-9">
                             <p class="text-dark mb-0 fw-semibold fs-14">Ultima
                                 Reunion</p>
-                            <h5 class="mt-2 mb-0 fw-bold">{{ $mesReunion }}</h5>
+                            <h5 class="mt-2 mb-0 fw-bold">{{ $mesReunion=null ? :"N/A" }}</h5>
                         </div>
                         <!--end col-->
                         <div class="col-3 align-self-center">
@@ -89,17 +92,64 @@
             </div>
             <!--end card-->
         </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+            
+                <div class="card-body">
+                    <h4 class="text-muted">Asistencia</h4>
+                    <canvas id="myPieChart" width="400" height="400"></canvas>
+                </div>
+                <!--end card-body-->
+            </div>
 
-
-
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
-                aria-valuemax="100">50%</div>
         </div>
+<?php
+
+
+
+?>
 
 
     </div>
+@endsection
 
+@section('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctx = document.getElementById('myPieChart').getContext('2d');
 
-
+            var myPieChart = new Chart(ctx, {
+                type: 'pie', // Tipo de gráfico: pastel
+                data: {
+                    labels: ['Faltas', 'Asistencia', 'observados'], // Etiquetas
+                    datasets: [{
+                        label: 'Distribución de Porcentajes',
+                        
+                        data: [{{$datosAsistencia['noAsistio']}},{{$datosAsistencia['asistencia']}},{{$datosAsistencia['observado']}}], // Datos de los porcentajes
+                        backgroundColor: ['#ff6384', '#36a2eb',
+                            '#fec76f'
+                        ], // Colores de los segmentos
+                        borderColor: ['#fff', '#fff', '#fff'], // Color del borde
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw +
+                                        '%'; // Mostrar porcentaje en el tooltip
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection
