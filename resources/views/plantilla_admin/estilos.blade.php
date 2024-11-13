@@ -5,7 +5,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- App favicon -->
-<link rel="shortcut icon" href="{{ asset('admin_template/images/favicon.ico') }}">
+<link rel="shortcut icon" href="{{ asset('admin_template/images/logo_cruz.png') }}">
 <link rel="stylesheet" href="{{ asset('admin_template/libs/jsvectormap/css/jsvectormap.min.css') }}">
 <!-- App css -->
 <link href="{{ asset('admin_template/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
