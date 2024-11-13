@@ -11,9 +11,12 @@
                             <h4 class="card-title">LISTA DE ASISTENCIA</h4>
                         </div>
                         <div class="col-auto">
+                            @can('reunion.planificacion.crearAsistencia')
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAsistencia">
                                 <i class="fas fa-plus me-1"></i> Nuevo
                             </button>
+                            @endcan
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

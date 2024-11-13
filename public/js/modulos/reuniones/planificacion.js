@@ -89,28 +89,47 @@ function listar_reuniones() {
                     render: function (data, type, row) {
                         if (row.estado == "activo") {
                             return ` <div>
-                            <a class="btn btn-sm btn-outline-danger px-2 d-inline-flex align-items-center terminar_reunion" data-id="${row.id}">
+
+                             ${permissions['eliminar'] ?
+                                    `
+                                      <a class="btn btn-sm btn-outline-danger px-2 d-inline-flex align-items-center terminar_reunion" data-id="${row.id}">
                                 <i class="fas fa-window-close fs-16"></i>
                             </a>
-                              <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center " data-id="${row.id}">
+                                `
+                                    : ``
+                                }
+                          
+                                 ${permissions['verAsistencia'] ?
+                                    ` <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center " data-id="${row.id}">
                                 <i class="fas fa-clipboard-check fs-16"></i>
-                            </a>
-                              <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
+                            </a>`
+                                    : ``
+                                }
+                              ${permissions['generarReporte'] ?
+                                    ` <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
                                 <i class="fas fa-id-cardfas fa-clipboard-list fs-16"></i>
-                            </a> 
+                            </a> `
+                                    : ``
+                                }
+                             
                             </div>`;
                         } else {
                             return `
-                              </a>
-                              <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center ">
+                              <div>
+                                ${permissions['verAsistencia'] ?
+                                    ` <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center " data-id="${row.id}">
                                 <i class="fas fa-clipboard-check fs-16"></i>
-                            </a>
-                            
-                            
-                              <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
+                            </a>`
+                                    : ``
+                                }
+                              ${permissions['generarReporte'] ?
+                                    ` <a  href="reporte_asistencia/${row.id}" class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center" target="_blank">
                                 <i class="fas fa-id-cardfas fa-clipboard-list fs-16"></i>
-                            </a>
-                            `;
+                            </a> `
+                                    : ``
+                                }
+                           
+                           </div> `;
                         }
 
                     }

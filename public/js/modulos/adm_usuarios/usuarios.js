@@ -131,14 +131,24 @@ function listar_usuarios() {
                                         </a>` : ''
 
                             }
-                                  <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
+
+                            ${permissions['editarRol'] ?
+
+                                `
+                                <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
                                                         data-id="${row.id}">
                                                         <i class="far fa-edit fs-16"></i>
-
                                   </a>
-                                     <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
+                                ` : ``
+                            }
+
+                            ${permissions['editarTargeta'] ?
+                                ` <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
                                         <i class="fas fa-id-card fs-16"></i>
-                                    </a>
+                                    </a>`
+                                :``
+                            }
+                                                                     
                                  </div>   
                                 </td>
                             </div >
@@ -201,9 +211,9 @@ $('#obtnerTargeta').click(function (e) {
             mensajeAlerta(error, "error");
             return;
         }
-       
+
         if (response.tipo != "exito") {
-            $('#cod_targeta').attr('placeholder',response.mensaje);
+            $('#cod_targeta').attr('placeholder', response.mensaje);
             return;
         }
 

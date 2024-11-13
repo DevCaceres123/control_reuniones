@@ -9,8 +9,8 @@
                     <div class="row align-items-center">
                         <div class="col">
                             <h4 class="card-title">
-                               <span class="badge bg-danger fs-4">
-                                     LISTA DE USUARIOS
+                                <span class="badge bg-danger fs-4">
+                                    LISTA DE USUARIOS
                                 </span>
                             </h4>
                         </div>
@@ -128,16 +128,21 @@
                                                             </a>
                                                         @endcan
 
-                                                        <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
-                                                            data-id="{{ $usuario->id }}">
-                                                            <i class="far fa-edit fs-16"></i>
+                                                        @can('admin.usuario.editarRol')
+                                                            <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
+                                                                data-id="{{ $usuario->id }}">
+                                                                <i class="far fa-edit fs-16"></i>
 
-                                                        </a>
-                                                        <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
-                                                            data-id="{{ $usuario->id }}">
-                                                            <i class="fas fa-id-card fs-16"></i>
+                                                            </a>
+                                                        @endcan
 
-                                                        </a>
+                                                        @can('admin.usuario.editarTargeta')
+                                                            <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
+                                                                data-id="{{ $usuario->id }}">
+                                                                <i class="fas fa-id-card fs-16"></i>
+
+                                                            </a>
+                                                        @endcan
                                                     </div>
                                                 </td>
                                             </tr>

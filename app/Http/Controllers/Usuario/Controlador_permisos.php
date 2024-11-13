@@ -29,7 +29,17 @@ class Controlador_permisos extends Controller
     public function listar()
     {
         $listar_permiso = Permission::OrderBy('id', 'asc')->get();
-        return response()->json($listar_permiso);
+        $permissions = [
+            'editar' => auth()->user()->can('admin.permiso.editar'),
+            'eliminar' => auth()->user()->can('admin.permiso.eliminar'),
+        ];
+        return response()->json(
+            [
+                'permisos' => $listar_permiso,
+                'permissions' => $permissions,
+            ],
+            200
+        );
     }
     /**
      *Fin de listar

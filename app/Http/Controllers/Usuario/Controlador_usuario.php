@@ -318,6 +318,8 @@ class Controlador_usuario extends Controller
         $permissions = [
             'desactivar' => auth()->user()->can('admin.usuario.desactivar'),
             'reset' => auth()->user()->can('admin.usuario.reset'),
+            'editarRol' => auth()->user()->can('admin.usuario.editarRol'),
+            'editarTargeta' => auth()->user()->can('admin.usuario.editarTargeta'),
 
         ];
         return response()->json([

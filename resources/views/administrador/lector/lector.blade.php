@@ -11,9 +11,11 @@
             </div>
             <div class="col-auto">
                 <div class="col-auto">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalLector">
-                        <i class="fas fa-plus me-1"></i> Nuevo
-                    </button>
+                    @can('lector.nuevo')
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalLector">
+                            <i class="fas fa-plus me-1"></i> Nuevo
+                        </button>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -83,24 +85,32 @@
                         <div class="mt-1 ">
                             <form class="formularioLectoresUso">
                                 <div class="d-flex justify-content-center align-items-center  text-light">
-                                    <input type="hidden" name="lector_id" id="lector_id" value={{ $lector->id }} class="lector_id">
+                                    <input type="hidden" name="lector_id" id="lector_id" value={{ $lector->id }}
+                                        class="lector_id">
 
                                     @if ($lector->estado == 'inactivo')
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="opcionLector"
-                                                id="inlineRadio1" value="registro" checked>
-                                            <label class="form-check-label" for="inlineRadio1">Registro</label>
+                                            @can('lector.opciones')
+                                                <input class="form-check-input" type="radio" name="opcionLector"
+                                                    id="inlineRadio1" value="registro" checked>
+                                                <label class="form-check-label" for="inlineRadio1">Registro</label>
+                                            @endcan
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="opcionLector"
-                                                id="inlineRadio2" value="asistencia">
-                                            <label class="form-check-label" for="inlineRadio2">Asistencia</label>
+                                            @can('lector.opciones')
+                                                <input class="form-check-input" type="radio" name="opcionLector"
+                                                    id="inlineRadio2" value="asistencia">
+                                                <label class="form-check-label" for="inlineRadio2">Asistencia</label>
+                                            @endcan
                                         </div>
-                                        <button class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center uso_lector"
-                                            id="btnLector_uso" data-id={{$lector->id}}>
-                                            <i class="fas fa-check-circle fs-14 me-1"></i>
-                                            Enviar
-                                        </button>
+                                        @can('lector.usar')
+                                            <button
+                                                class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center uso_lector"
+                                                id="btnLector_uso" data-id={{ $lector->id }}>
+                                                <i class="fas fa-check-circle fs-14 me-1"></i>
+                                                Enviar
+                                            </button>
+                                        @endcan
                                     @endif
 
                                     @if ($lector->estado == 'activo')
@@ -114,16 +124,21 @@
                             </form>
                             @if ($lector->estado == 'inactivo')
                                 <div class="mt-2 d-flex justify-content-evenly ">
-                                    <a class="btn btn-sm btn-outline-danger px-2 d-inline-flex align-items-center eliminar_lector"
-                                        data-id={{ $lector->id }}>
-                                        <i class="iconoir-trash fs-14  me-1"></i>
-                                        Eliminar
-                                    </a>
-                                    <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center editar_lector"
-                                        data-id={{ $lector->id }}>
-                                        <i class="iconoir-warning-circle fs-14 me-1"></i>
-                                        Editar
-                                    </a>
+                                    @can('lector.eliminar')
+                                        <a class="btn btn-sm btn-outline-danger px-2 d-inline-flex align-items-center eliminar_lector"
+                                            data-id={{ $lector->id }}>
+                                            <i class="iconoir-trash fs-14  me-1"></i>
+                                            Eliminar
+                                        </a>
+                                    @endcan
+
+                                    @can('lector.editar')
+                                        <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center editar_lector"
+                                            data-id={{ $lector->id }}>
+                                            <i class="iconoir-warning-circle fs-14 me-1"></i>
+                                            Editar
+                                        </a>
+                                    @endcan
                                 </div>
                             @endif
 

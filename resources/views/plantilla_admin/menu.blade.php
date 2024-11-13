@@ -6,7 +6,7 @@
                 <img src="{{ asset('admin_template/images/logo_cruz.png') }}" alt="logo-small" class="logo-sm">
             </span>
             <span class="">
-                
+
             </span>
         </a>
     </div>
@@ -41,21 +41,23 @@
                             </a>
                             <div class="collapse " id="usuarios">
                                 <ul class="nav flex-column">
-                                    @can('admin.usuario.incio')
+                                    @can('admin.usuario.inicio')
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ route('usuarios.index') }}">Usuarios</a>
                                         </li><!--end nav-item-->
                                     @endcan
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('roles.index') }}">Roles</a>
-                                    </li><!--end nav-item-->
+                                    @can('admin.rol.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('roles.index') }}">Roles</a>
+                                        </li><!--end nav-item-->
+                                    @endcan
 
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('permisos.index') }}">Permisos</a>
-                                    </li><!--end nav-item-->
-
+                                    @can('admin.permiso.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('permisos.index') }}">Permisos</a>
+                                        </li><!--end nav-item-->
+                                    @endcan
 
                                 </ul><!--end nav-->
                             </div><!--end startbarApplications-->
@@ -72,74 +74,80 @@
                         <span>ACTIVIDADES</span>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#reuniones" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="reuniones">
-                            <i class="iconoir-community menu-icon"></i>
-                            <span>REUNIONES</span>
-                        </a>
-                        <div class="collapse " id="reuniones">
-                            <ul class="nav flex-column">
+                    @can('reunion.index')
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reuniones" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="reuniones">
+                                <i class="iconoir-community menu-icon"></i>
+                                <span>REUNIONES</span>
+                            </a>
+                            <div class="collapse " id="reuniones">
+                                <ul class="nav flex-column">
+                                    @can('reunion.planificacion.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('reuniones.index') }}">Planificacion de
+                                                Reuniones</a>
+                                        </li>
+                                    @endcan
 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('reuniones.index') }}">Planificacion de
-                                        Reuniones</a>
-                                </li>
+                                </ul><!--end nav-->
+                            </div><!--end startbarApplications-->
+                        </li>
+                    @endcan
 
+                    @can('pago.index')
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pagos" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="pagos">
+                                <i class="fas fa-money-bill menu-icon"></i>
+                                <span>PAGOS</span>
+                            </a>
+                            <div class="collapse " id="pagos">
+                                <ul class="nav flex-column">
+                                    @can('pago.cuotas.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('pagarCuotas.index') }}">Cuotas</a>
+                                        </li>
+                                    @endcan
 
-                            </ul><!--end nav-->
-                        </div><!--end startbarApplications-->
-                    </li>
+                                </ul><!--end nav-->
+                            </div><!--end startbarApplications-->
+                        </li>
+                    @endcan
 
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pagos" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="pagos">
-                            <i class="fas fa-money-bill menu-icon"></i>
-                            <span>PAGOS</span>
-                        </a>
-                        <div class="collapse " id="pagos">
-                            <ul class="nav flex-column">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('pagarCuotas.index') }}">Cuotas</a>
-                                </li>
-
-
-                            </ul><!--end nav-->
-                        </div><!--end startbarApplications-->
-                    </li>
-
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#reportes" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controreportes">
-                            <i class="far fa-folder-open menu-icon"></i>
-                            <span>REPORTES</span>
-                        </a>
-                        <div class="collapse " id="reportes">
-                            <ul class="nav flex-column">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('asistencias.index') }}">Reporte de
-                                        Asistencia</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('cuotas.index') }}">Reporte de cuotas</a>
-                                </li>
-
-                            </ul><!--end nav-->
-                        </div><!--end startbarApplications-->
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('lectores.index') }}" role="button" aria-expanded="false"
-                            aria-controls="sidebarDashboards">
-                            <i class="fas fa-desktop menu-icon"></i>
-                            <span>LECTORES</span>
-                        </a>
-                    </li><!--end nav-item-->
-
+                    @can('reporte.index')
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reportes" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controreportes">
+                                <i class="far fa-folder-open menu-icon"></i>
+                                <span>REPORTES</span>
+                            </a>
+                            <div class="collapse " id="reportes">
+                                <ul class="nav flex-column">
+                                    @can('reporte.asistencia.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('asistencias.index') }}">Reporte de
+                                                Asistencia</a>
+                                        </li>
+                                    @endcan
+                                    @can('reporte.cuotas.inicio')
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('cuotas.index') }}">Reporte de cuotas</a>
+                                        </li>
+                                    @endcan
+                                </ul><!--end nav-->
+                            </div><!--end startbarApplications-->
+                        </li>
+                    @endcan
+                    @can('lector.inicio')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('lectores.index') }}" role="button" aria-expanded="false"
+                                aria-controls="sidebarDashboards">
+                                <i class="fas fa-desktop menu-icon"></i>
+                                <span>LECTORES</span>
+                            </a>
+                        </li><!--end nav-item-->
+                    @endcan
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="#sidebarElements" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarElements">

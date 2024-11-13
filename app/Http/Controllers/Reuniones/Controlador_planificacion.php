@@ -53,8 +53,9 @@ class Controlador_planificacion extends Controller
 
 
         $permissions = [
-            // 'desactivar' => auth()->user()->can('admin.usuario.desactivar'),
-            // 'reset' => auth()->user()->can('admin.usuario.reset'),
+            'eliminar' => auth()->user()->can('reunion.planificacion.eliminar'),
+            'verAsistencia' => auth()->user()->can('reunion.planificacion.verAsistencia'),
+            'generarReporte' => auth()->user()->can('reunion.planificacion.crearAsistencia'),
 
         ];
         return response()->json([

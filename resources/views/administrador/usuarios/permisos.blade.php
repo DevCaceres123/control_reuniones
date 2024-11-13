@@ -14,9 +14,11 @@
                             </h4>
                         </div>
                         <div class="col-auto">
-                            <button class="btn btn-primary" onclick="abrirModalPermiso()">
-                                <i class="fas fa-plus me-1"></i> Nuevo
-                            </button>
+                            @can('admin.rol.crear')
+                                <button class="btn btn-primary" onclick="abrirModalPermiso()">
+                                    <i class="fas fa-plus me-1"></i> Nuevo
+                                </button>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -202,9 +204,12 @@
 
         // Función para renderizar la tabla de permisos utilizando DataTables
         function permiso_tabla(data) {
+
+            let permisos = data.permisos;
+            let permissions = data.permissions;
             $('#tabla_permiso').DataTable({
                 responsive: true,
-                data: data,
+                data: permisos,
                 columns: [{
                         data: null,
                         className: 'table-td',
@@ -218,13 +223,24 @@
                         data: null,
                         className: 'table-td',
                         render: (data, type, row) => `
-                            <button type="button" class="btn rounded-pill btn-sm btn-warning p-0.5" onclick="abrirModalPermiso('${row.id}')">
-                                <i class="las la-pen fs-18"></i>
-                            </button>
+                         ${permissions['editar'] ?
+                            `
+                                <button type="button" class="btn rounded-pill btn-sm btn-warning p-0.5" onclick="abrirModalPermiso('${row.id}')">
+                                    <i class="las la-pen fs-18"></i>
+                                </button>`
+                            :``
+                         }
 
-                            <button type="button" class="btn rounded-pill btn-sm btn-danger p-0.5" onclick="eliminarPermiso('${row.id}')">
-                                <i class="las la-trash-alt fs-18"></i>
-                            </button>
+                          ${permissions['eliminar'] ?
+
+                          ` <button type="button" class="btn rounded-pill btn-sm btn-danger p-0.5" onclick="eliminarPermiso('${row.id}')">
+                                    <i class="las la-trash-alt fs-18"></i>
+                                </button>`
+                          :``
+                        }
+                            
+
+                           
                         `
                     },
                 ],
