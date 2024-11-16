@@ -124,37 +124,31 @@ function listar_usuarios() {
                         return `
                             <div class="text-end">
                                 <td>
-                                 <div class="d-flex justify-content-between">
-                                    ${permissions['reset'] ? // Verificar permiso para resetear usuario
-                                `<a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
-                                            <i class="fas fa-redo fs-16"></i>
-                                        </a>` : ''
-
-                            }
-
-                            ${permissions['editarRol'] ?
-
-                                `
-                                <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol"
-                                                        data-id="${row.id}">
-                                                        <i class="far fa-edit fs-16"></i>
-                                  </a>
-                                ` : ``
-                            }
-
-                            ${permissions['editarTargeta'] ?
-                                ` <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id=${row.id}>
-                                        <i class="fas fa-id-card fs-16"></i>
-                                    </a>`
-                                :``
-                            }
-                                                                     
-                                 </div>   
+                                    <div class="d-flex justify-content-between">
+                                        ${permissions['reset'] ? `
+                                            <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
+                                                <i class="fas fa-redo fs-16"></i>
+                                            </a>
+                                        ` : ''}
+                
+                                        ${permissions['editarRol'] ? `
+                                            <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol" data-id="${row.id}">
+                                                <i class="far fa-edit fs-16"></i>
+                                            </a>
+                                        ` : ''}
+                
+                                        ${permissions['editarTargeta'] && row.roles[0].name === "estudiante" ? `
+                                            <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id="${row.id}">
+                                                <i class="fas fa-id-card fs-16"></i>
+                                            </a>
+                                        ` : ''}
+                                    </div>   
                                 </td>
-                            </div >
-                `;
+                            </div>
+                        `;
                     }
-                },
+                }
+                
             ],
             destroy: true
         });

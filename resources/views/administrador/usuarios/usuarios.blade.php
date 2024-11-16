@@ -137,11 +137,13 @@
                                                         @endcan
 
                                                         @can('admin.usuario.editarTargeta')
-                                                            <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
-                                                                data-id="{{ $usuario->id }}">
-                                                                <i class="fas fa-id-card fs-16"></i>
+                                                            @if ($usuario->roles[0]->name == 'estudiante')
+                                                                <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta"
+                                                                    data-id="{{ $usuario->id }}">
+                                                                    <i class="fas fa-id-card fs-16"></i>
 
-                                                            </a>
+                                                                </a>
+                                                            @endif
                                                         @endcan
                                                     </div>
                                                 </td>
