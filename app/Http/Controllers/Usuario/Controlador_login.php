@@ -31,8 +31,8 @@ class Controlador_login extends Controller
 
     public function ingresar(Request $request)
     {
-       
-       
+
+
 
         if ($this->validarDatos($request)->fails()) {
             return $this->respuestaError('Todos los campos son requeridos');
@@ -60,7 +60,7 @@ class Controlador_login extends Controller
         return Validator::make($request->all(), [
             'usuario' => 'required',
             'password' => 'required',
-           
+
         ]);
     }
     private function validarCaptcha(Request $request)
@@ -133,10 +133,15 @@ class Controlador_login extends Controller
         // REUNION
         $reunion = Reunion::select('entrada')
             ->where('estado', 'activo')->first();
-
+        
         if ($reunion) {
             $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
+            $hora_entrada = Carbon::parse($reunion->entrada)->format('H:i');
+            $data['hora_entrada']=$hora_entrada;
             $data['mesReunion'] = $mesReunion;
+        }else{
+            $data['hora_entrada']=null;
+            $data['mesReunion'] = null;
         }
 
 

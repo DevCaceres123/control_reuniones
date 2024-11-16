@@ -31,9 +31,9 @@
                             <!--end col-->
                         </div>
                         <!--end row-->
-                        <p class="mb-0 text-truncate text-danger mt-3"><span
-                                class="text-success text-bold">{{ $usuariosInactivos }}</span>
-                            Usuarios Inactivos</p>
+                        <p class="mb-0 text-truncate text-bold text-light mt-3 bg-dark p-2 rounded"> Usuarios Inactivos :
+                            <span class="text-info">{{ $usuariosInactivos }}</span>
+                        </p>
                     </div>
                     <!--end card-body-->
                 </div>
@@ -59,8 +59,10 @@
                             <!--end col-->
                         </div>
                         <!--end row-->
-                        <p class="mb-0 text-truncate text-muted mt-3"><span class="text-success">Mes</span>
-                            {{ $nombreMes }}</p>
+                        <p class="mb-0 text-truncate text-bold text-light mt-3 bg-dark p-2 rounded">
+                           
+                            Mes: <span class="text-success"> {{ $nombreMes }}</span>
+                        </p>
                     </div>
                     <!--end card-body-->
                 </div>
@@ -74,7 +76,7 @@
                             <div class="col-9">
                                 <p class="text-dark mb-0 fw-semibold fs-14">Ultima
                                     Reunion</p>
-                                <h5 class="mt-2 mb-0 fw-bold">{{ $mesReunion = null ?: 'N/A' }}</h5>
+                                <h5 class="mt-2 mb-0 fw-bold">{{ $mesReunion ?? 'N/A' }}</h5>
                             </div>
                             <!--end col-->
                             <div class="col-3 align-self-center">
@@ -86,7 +88,8 @@
                             <!--end col-->
                         </div>
                         <!--end row-->
-                        <p class="mb-0 text-truncate text-muted mt-3"><span class="text-danger"></span>
+                        <p class="mb-0 text-truncate text-bold mt-3 text-light mt-3 bg-dark p-2 rounded ">Hora reunion: <span
+                                class="text-warning">{{ $hora_entrada ?? 'N/A' }}</span>
                         </p>
                     </div>
                     <!--end card-body-->
