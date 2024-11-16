@@ -360,7 +360,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
-                    <button type="submit" class="btn btn-success rounded btn-sm" id="btn-user"><i
+                    <button type="submit" class="btn btn-success rounded btn-sm" id="btn_targeta"><i
                             class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
                 </div>
 
@@ -404,7 +404,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
-                    <button type="submit" class="btn btn-success rounded btn-sm"><i
+                    <button type="submit" class="btn btn-success rounded btn-sm" id="btn_editRol"><i
                             class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
                 </div>
 

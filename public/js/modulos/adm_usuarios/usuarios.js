@@ -148,7 +148,7 @@ function listar_usuarios() {
                         `;
                     }
                 }
-                
+
             ],
             destroy: true
         });
@@ -167,7 +167,7 @@ $('#formularioUsuario').submit(function (e) {
     let datosFormulario = $('#formularioUsuario').serialize();
 
     crud("admin/usuarios", "POST", null, datosFormulario, function (error, response) {
-        $("#btnUser_nuevo").prop("disabled", false);
+        1
         //console.log(response);
         // if (error != null) {
         //     mensajeAlerta(error, "error");
@@ -253,6 +253,7 @@ $('#table_user').on('click', '.desactivar_usuario', function (e) {
 });
 
 
+// CAMBIAR ROL
 $('#table_user').on('click', '.cambiar_rol', function (e) {
     e.preventDefault(); // Evitar que el enlace recargue la página
     $('#ModalRol').modal('show');
@@ -262,17 +263,18 @@ $('#table_user').on('click', '.cambiar_rol', function (e) {
 
 });
 
+// GUARDAR EL NUEVO ROL DE USUARIO
 
 $('#formEditarRol').submit(function (e) {
     e.preventDefault(); // Evitar que el enlace recargue la página
     let id_user = $('#user_id_edit').val();
-
+    $("#btn_editRol").prop("disabled", true);
     let datosFormulario = {
         'user_id': $('#user_id_edit').val(),
         'rol_id': $('#role_edit').val(),
     };
     crud("admin/editar_rol", "PUT", id_user, datosFormulario, function (error, response) {
-
+        $("#btn_editRol").prop("disabled", false);
         if (error != null) {
             mensajeAlerta(error, "error");
             return;
@@ -301,6 +303,7 @@ $('#table_user').on('click', '.asignar_targeta', function (e) {
     let id_alumno = $(this).data('id'); // Obtener el id del alumno desde el data-id
 
     crud("admin/usuarios", "GET", id_alumno, null, function (error, response) {
+
 
         if (error != null) {
             mensajeAlerta(error, "error");
@@ -385,13 +388,13 @@ $('#registrtarCodigoTargeta').submit(function (e) {
 
     let datosFormulario = $('#registrtarCodigoTargeta').serialize();
 
-
+    $("#btn_targeta").prop("disabled", true);
     // console.log(datosFormulario);
     vaciar_formulario('registrtarCodigoTargeta');
 
     crud("admin/asignar_targeta", "POST", null, datosFormulario, function (error, response) {
-
-        console.log(response);
+        $("#btn_targeta").prop("disabled", false);
+        // console.log(response);
         if (error != null) {
             mensajeAlerta(error, "error");
             return;

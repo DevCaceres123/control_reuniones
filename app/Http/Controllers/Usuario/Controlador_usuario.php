@@ -77,7 +77,7 @@ class Controlador_usuario extends Controller
 
     public function store(UsuarioRequest $request)
     {
-
+        
         DB::beginTransaction();
 
 
@@ -104,7 +104,7 @@ class Controlador_usuario extends Controller
             $usuario->cod_targeta = $request->cod_targeta;
             $usuario->departamento_id = $request->expedido;
             $usuario->usuario = $request->usuario;
-            $usuario->password = bcrypt($request->password);
+            $usuario->password = Hash::make($request->password);
             // $usuario->rol = $request->usuario_edad;
 
             // Guardar el nuevo usuario en la base de datos
