@@ -132,15 +132,17 @@ class Controlador_login extends Controller
 
         // REUNION
         $reunion = Reunion::select('entrada')
-            ->where('estado', 'activo')->first();
-        
+
+            ->orderBy('entrada', 'desc')
+            ->first();;
+
         if ($reunion) {
             $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
             $hora_entrada = Carbon::parse($reunion->entrada)->format('H:i');
-            $data['hora_entrada']=$hora_entrada;
+            $data['hora_entrada'] = $hora_entrada;
             $data['mesReunion'] = $mesReunion;
-        }else{
-            $data['hora_entrada']=null;
+        } else {
+            $data['hora_entrada'] = null;
             $data['mesReunion'] = null;
         }
 
