@@ -12,6 +12,7 @@ use App\Http\Controllers\Usuario\Controlador_rol;
 use App\Http\Controllers\Usuario\Controlador_usuario;
 use App\Http\Middleware\Autenticados;
 use App\Http\Middleware\No_autenticados;
+use Mews\Captcha\Facades\Captcha;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +28,12 @@ Route::prefix('/')->middleware([No_autenticados::class])->group(function () {
 
     Route::controller(Controlador_login::class)->group(function () {
         Route::post('ingresar', 'ingresar')->name('log_ingresar');
+    });
+
+    // para actualizar el capcha
+    Route::get('/cambiar_capcha', function () {
+
+        return response()->json(['captcha' => captcha_src()]);
     });
 });
 

@@ -69,9 +69,22 @@
                             <label for="username">Username</label>
                             <input type="text" id="usuario" name="usuario">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="position: relative">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password">
+                            <a type="button" onclick="togglePassword()" id="btn_vista"><i
+                                    class="fas fa-eye-slash fs-18" id="icono_password"></i></a>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="captcha">Código de Verificación</label>
+                            <div class="d-flex  align-items-center justify-content-center">
+                                <img src="{{ captcha_src() }}" alt="captcha" class="captcha-img">
+                                <a type="button" onclick="refreshCaptcha()"><i
+                                        class="fas fa-redo fs-20 ms-3 mt-1 "></i></a>
+                            </div>
+                            <input type="text" id="captcha" name="captcha" class="" required>
+
                         </div>
                         <button type="button" class="boton btn_formulario" id="btn_ingresar_usuario">Ingresar</button>
                         <div class="text-center py-2 text-light" id="mensaje_error"></div>
@@ -139,6 +152,7 @@
                 setTimeout(() => window.location.reload(), 1500);
             } else {
                 validarBoton(false, 'INGRESAR');
+                refreshCaptcha();
             }
         } catch (error) {
             console.error('Error:', error);
@@ -146,4 +160,35 @@
             validarBoton(false, 'INGRESAR');
         }
     });
+
+
+    // actualizar capcha
+    function refreshCaptcha() {
+        fetch('/cambiar_capcha')
+            .then(response => response.json())
+            .then(data => {
+                // Actualiza la URL de la imagen CAPTCHA en el DOM
+
+                document.querySelector('img[alt="captcha"]').src = data.captcha;
+            })
+            .catch(error => console.error('Error al recargar el CAPTCHA:', error));
+    }
+
+    function togglePassword() {
+        let passwordInput = document.getElementById("password");
+        let iconPassword = document.getElementById("icono_password");
+
+        // Cambiar el tipo de input primero
+        let type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+
+        // Ahora cambiar el icono según el nuevo tipo
+        if (type === "text") {
+            iconPassword.classList.remove("fas", "fa-eye-slash", "fs-18"); // Remover clases por separado
+            iconPassword.classList.add("fas", "fa-eye", "fs-18"); // Agregar clases por separado
+        } else {
+            iconPassword.classList.remove("fas", "fa-eye", "fs-18"); // Remover clases por separado
+            iconPassword.classList.add("fas", "fa-eye-slash", "fs-18"); // Agregar clases por separado
+        }
+    }
 </script>

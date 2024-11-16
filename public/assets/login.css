@@ -35,7 +35,7 @@
 
 .contenedor_login {
     width: 70%;
-    height: 70%;
+    height: 75%;
     border: 1px solid #dac9bd;
     border-radius: 20px;
     position: relative;
@@ -220,14 +220,23 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"]
+{
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     margin-top: 8px;
 }
-
+#btn_vista{
+    
+    position: absolute;
+    top:50%;
+    bottom: 50%;
+    margin-left: -35px;
+    margin-top: 5px;
+    color: #d2691e;
+}
 .boton {
     background-color: rgba(0, 0, 0, .8);
 

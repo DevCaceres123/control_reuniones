@@ -31,8 +31,15 @@ class Controlador_login extends Controller
 
     public function ingresar(Request $request)
     {
+       
+       
+
         if ($this->validarDatos($request)->fails()) {
             return $this->respuestaError('Todos los campos son requeridos');
+        }
+
+        if ($this->validarCaptcha($request)->fails()) {
+            return $this->respuestaError('error al ingresar el codigo');
         }
 
         $usuario = $this->buscarUsuario($request->usuario);
@@ -52,7 +59,14 @@ class Controlador_login extends Controller
     {
         return Validator::make($request->all(), [
             'usuario' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+           
+        ]);
+    }
+    private function validarCaptcha(Request $request)
+    {
+        return Validator::make($request->all(), [
+            'captcha' => 'required|captcha',
         ]);
     }
 
