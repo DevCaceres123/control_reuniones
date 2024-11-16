@@ -146,10 +146,11 @@ $('#formularioReunion_crear').submit(function (e) {
 
     e.preventDefault();
     let datosFormulario = $('#formularioReunion_crear').serialize();
+    $("#btnReunion_nueva").prop("disabled", true);
     vaciar_errores("formularioReunion_crear");
     crud("admin/reuniones", "POST", null, datosFormulario, function (error, response) {
-
-        console.log(response);
+        $("#btnReunion_nueva").prop("disabled", false);
+        // console.log(response);
         // Verificamos que no haya un error o que todos los campos sean llenados
         if (response.tipo === "errores") {
 

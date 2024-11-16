@@ -161,7 +161,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
                             class="ri-close-line me-1 align-middle"></i> Cerrar</button>
-                    <button type="submit" class="btn btn-success rounded btn-sm" id="btnLector_nuevo"><i
+                    <button type="submit" class="btn btn-success rounded btn-sm" id="btnReunion_nueva"><i
                             class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
                 </div>
 
