@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function pagos()
     {
-        return $this->belongsToMany('App\Models\Pago', 'user_pago');
+        return $this->hasMany('App\Models\Pago', 'user_pago');
     }
 
     public function lectores()
@@ -92,9 +92,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Lector', 'user_id'); // Si user_id es la clave en la tabla lectores
     }
 
-    public function departemento(){
+    public function departemento()
+    {
         return $this->belongsTo('App\Models\Departamento');
     }
 
 
+
+    //se creo esta realacion para simplificar las consultas
+    public function mesesPagados()
+    {
+        return $this->belongsToMany(Mes::class, 'pagos', 'id_usuario', 'mes_id'); // Relación a través de pagos
+    }
 }

@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pago extends Model
 {
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany('App\Models\User','user_pago');
+        return $this->belongsTo('App\Models\User','user_pago');
     }
 
     public function mes(){

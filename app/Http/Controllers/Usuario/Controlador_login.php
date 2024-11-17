@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Login\UsuarioRequest;
+use App\Models\Mes;
 use App\Models\Pago;
 use App\Models\Reunion;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class Controlador_login extends Controller
 {
@@ -129,12 +131,12 @@ class Controlador_login extends Controller
 
         $data['nombreMes'] = ucfirst($nombreMes); // Capitaliza la primera letra del mes
         $data['pagosDelMes'] = $pagosDelMes;
+        $data['cantidadRecaudada'] = $pagosDelMes * 10;
 
         // REUNION
         $reunion = Reunion::select('entrada')
-
             ->orderBy('entrada', 'desc')
-            ->first();;
+            ->first();
 
         if ($reunion) {
             $mesReunion = Carbon::parse($reunion->entrada)->locale('es')->translatedFormat('d \d\e F \d\e Y');
@@ -149,6 +151,17 @@ class Controlador_login extends Controller
 
 
         $data['datosAsistencia'] = $this->asistencia();
+
+        if ($this->asistenciaUltimaReunion() != null) {
+            $data['datosAsistenciaUltimo'] = $this->asistenciaUltimaReunion();
+        } else {
+            $data['datosAsistenciaUltimo'] = $this->asistenciaUltimaReunion();
+        }
+
+        $data['pagoAnual'] = $this->pagos_anual();
+
+        
+
         return view('inicio', $data);
     }
 
@@ -159,6 +172,8 @@ class Controlador_login extends Controller
 
         $total_estudiantes = User::select('id', 'nombres', 'paterno', 'materno')->role('estudiante')->count();
         $total_reuniones = Reunion::select('id')->count();
+
+        // Filtrar los estudiantes que asistieron
         $estudiantes_reunion = Reunion::withCount(['users' => function ($query) {
             $query->where('entrada', '!=', null)
                 ->where('salida', '!=', null);
@@ -169,7 +184,7 @@ class Controlador_login extends Controller
             $asitencia = $value->users_count + $asitencia;
         }
 
-
+        // Filtrar los estudiantes que no observados
         $estudiantes_reunion = Reunion::withCount(['users' => function ($query) {
             $query->where('entrada', '=', null)
                 ->orWhere('salida', '=', null);
@@ -179,7 +194,6 @@ class Controlador_login extends Controller
         foreach ($estudiantes_reunion as $value) {
             $observado = $value->users_count + $observado;
         }
-
 
 
         // Filtrar los estudiantes que no asistieron
@@ -207,6 +221,92 @@ class Controlador_login extends Controller
             'asistencia' => round($asitencia / $total_porcentaje * 100, 0),
             'observado' => round($observado / $total_porcentaje * 100, 0),
             'noAsistio' => round($noAsistio / $total_porcentaje * 100, 0),
+        ];
+    }
+
+
+    public function asistenciaUltimaReunion()
+    {
+
+        $total_estudiantes = User::role('estudiante')->count();
+        $ultima_reunion = Reunion::select('id', 'entrada')
+            ->orderBy('entrada', 'desc')
+            ->first();
+        if (!$ultima_reunion) {
+            return [
+                'ultima_asistencia' => null,
+                'ultima_observado' => null,
+                'ultima_noAsistio' => null,
+            ];
+        }
+        // estudiantes que asistieron
+        $estudiantes_asistencia = Reunion::select('id')->withCount(
+            ['users' => function ($query) {
+                $query->where('entrada', '!=', null)
+                    ->where('salida', '!=', null);
+            }]
+        )
+            ->where('id', $ultima_reunion->id)
+            ->first();
+
+
+
+        // estudiantes observados
+        $estudiantes_observados = Reunion::select('id')->withCount(
+            ['users' => function ($query) {
+                $query->where('entrada', '=', null)
+                    ->orWhere('salida', '=', null);
+            }]
+        )
+            ->where('id', $ultima_reunion->id)
+            ->first();
+
+
+        $estudiantes_ausentes = Reunion::select('id')->withCount('users')
+            ->where('id', $ultima_reunion->id)
+            ->get()
+            ->map(function ($reunion) use ($total_estudiantes) {
+                $reunion->estudiantes_ausentes_count = $total_estudiantes - $reunion->users_count;
+                return $reunion;
+            });
+
+
+        return [
+            'ultima_asistencia' => round($estudiantes_asistencia->users_count / $total_estudiantes * 100, 0),
+            'ultima_observado' => round($estudiantes_observados->users_count / $total_estudiantes * 100, 0),
+            'ultima_noAsistio' => round($estudiantes_ausentes[0]->estudiantes_ausentes_count / $total_estudiantes * 100, 0),
+        ];
+    }
+
+
+    function pagos_anual()
+    {
+
+        $total_estudiantes = User::role('estudiante')->count();
+        $total_meses = Mes::count();
+        // Obtener la cantidad de personas que pagaron por mes
+        $pagosPorMes = Mes::leftJoin('pagos', function ($join) {
+            $join->on('meses.id', '=', 'pagos.mes_id')
+                ->whereYear('pagos.fecha_pago', Carbon::now()->year); // Solo filtra los pagos del año actual
+        })
+            ->select('meses.mes', 'meses.id', DB::raw('COUNT(pagos.id) as cantidad_pagos'))
+            ->groupBy('meses.id', 'meses.mes')
+            ->orderBy('meses.id')
+            ->get();
+
+        $mesesPoecentaguesPagos = [];
+        $catidadPagada = 0;
+
+        foreach ($pagosPorMes as $key => $value) {
+            // Agregar cada mes con su porcentaje al array, usando el nombre del mes como índice
+            $mesesPoecentaguesPagos[$value->mes] = round($value->cantidad_pagos / $total_estudiantes * 100, 0);
+            $catidadPagada = ($value->cantidad_pagos * 10) + $catidadPagada;
+        }
+
+
+        return [
+            'pagoMeses'=>$mesesPoecentaguesPagos,
+            'catidadPagada'=> $catidadPagada,
         ];
     }
     /**
