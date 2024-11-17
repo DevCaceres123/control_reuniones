@@ -167,7 +167,7 @@ $('#formularioUsuario').submit(function (e) {
     let datosFormulario = $('#formularioUsuario').serialize();
 
     crud("admin/usuarios", "POST", null, datosFormulario, function (error, response) {
-        1
+        $("#btnUser_nuevo").prop("disabled", false);
         //console.log(response);
         // if (error != null) {
         //     mensajeAlerta(error, "error");
