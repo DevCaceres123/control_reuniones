@@ -34,7 +34,7 @@ class Controlador_asistencia extends Controller
      */
     public function store(Request $request)
     {
-        echo "llego";
+        
         $user = User::select('id', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
         $reunion = $user->reuniones()
             ->whereDate('reuniones.entrada', '>=', $request->fecha_inicio)

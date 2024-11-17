@@ -204,7 +204,7 @@ class Controlador_planificacion extends Controller
             ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
             ->get(); // Cambia first() por get()
 
-        // $asistenciaReunion = Reunion::whereHas('users')->get();
+        $asistenciaReunion = Reunion::whereHas('users')->get();
         return view('administrador.reunion.listaAsistencia', compact('estudiantesRegistrados', 'entradaSalidas', 'reunion_id'));
     }
     /**
@@ -289,12 +289,15 @@ class Controlador_planificacion extends Controller
 
     public function nueva_asistencia(ReunionRequest $request)
     {
+
         DB::beginTransaction();
         try {
             if ($request->role == "entrada") {
+
                 $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
             }
             if ($request->role == "salida") {
+
                 $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
             }
 
@@ -316,14 +319,14 @@ class Controlador_planificacion extends Controller
         try {
             $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
-            })->where('id', 1)->first();
+            })->where('id', $reunion_id)->first();
 
             if (!$reunion) {
 
                 $usuario->reuniones()->attach($reunion_id, [
                     'user_id' => $user_id,
                     $tipo_entrada => Carbon::now(),
-                    'manual' => "fue insertado manualmente",
+                    'manual' => $tipo_entrada . " " . "fue insertado manualmente",
                     "user_manual" => auth()->user()->id,
                 ]);
             } else {
@@ -332,7 +335,7 @@ class Controlador_planificacion extends Controller
                     [
                         'user_id' => $user_id,
                         $tipo_entrada => Carbon::now(),
-                        'manual' => "fue insertado manualmente",
+                        'manual' =>  $tipo_entrada . " " . "fue insertado manualmente",
                         "user_manual" => auth()->user()->id,
                     ]
                 );
