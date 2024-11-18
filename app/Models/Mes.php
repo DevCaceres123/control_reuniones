@@ -15,4 +15,9 @@ class Mes extends Model
     {
         return $this->hasMany('App\Models\Pago', 'mes_id');
     }
+
+    public function pagos_donacion()
+    {
+        return $this->hasMany('App\Models\PagoDonacion', 'mes_id');
+    }
 }

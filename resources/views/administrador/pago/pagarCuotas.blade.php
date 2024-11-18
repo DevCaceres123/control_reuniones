@@ -28,12 +28,12 @@
                 </div>
                 <div class="card-body">
                     <!-- Mostrar errores de validación -->
-                    @if ($errors->has('ci_estudiante'))
+                    @if ($errors->has('errores'))
                         <div class="alert alert-danger">
-                            {{ $errors->first('ci_estudiante') }}
+                            {{ $errors->first('errores') }}
                         </div>
                     @endif
-                    <form id="form_pagarCuotas">
+                    <form id="form_pagarCuotas" action="{{route('pagarCuotas.store')}}" method="POST" target="_blank">
                         @csrf <!-- Token CSRF para proteger el formulario -->
                         <div class="">
                             <label for="ci_estudiante" class="form-label">CI ESTUDIANTE</label>
@@ -68,18 +68,80 @@
                         <div class="mt-3 text-center">
                             <button type="submit"
                                 class="btn btn-md btn-outline-primary px-3 d-inline-flex align-items-center"
-                                id="buton_PagarCuota">
+                                id="buton_PagarCuota" disabled>
                                 <i class="far fa-money-bill-alt fs-14 me-1"></i>
                                 Pagar Cuota
                             </button>
+                            <button type="submit" class="btn btn-md btn-outline-danger px-4" id="buton_PagarCuotaDonacion">
+                                <i class="fas fa-handshake fs-20 me-1"></i>
+
+                            </button>
+
                         </div>
-                    </form>
+
+                        <div class="mt-1 text-center">
+
+                        </div>
+
+
                 </div>
             </div>
         </div>
 
     </div>
 
+
+
+    <!-- MODAL PARA PAGAR DONACION -->
+    <div class="modal fade" id="modalDonacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-center modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title " id="exampleModalLabel"><span class="badge badge-outline-primary rounded">PAGAR
+                            DONACION</span></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+                </div>
+                <div class="modal-body">
+                    <form id="formularioReunion_crear">
+                        <div class="row">
+
+
+                            <div class="form-group py-2 col-md-12">
+                                <label for="" class="form-label">DESCRIPCION</label>
+                                <div>
+
+                                    <div class="form-floating">
+                                        <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Ingrese descripcion de la donacion"
+                                            id="descripcion" maxlength="100">
+                                        </textarea>
+                                        <label for="descripcion">Ingrese descripcion de la donacion</label>
+                                    </div>
+
+                                    <div id="_descripcion"></div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger rounded btn-sm" data-bs-dismiss="modal"> <i
+                            class="ri-close-line me-1 align-middle"></i> Cerrar</button>
+                    <button type="button" class="btn btn-success rounded btn-sm" id="btn_nueva_donacion"><i
+                            class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
+                </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 

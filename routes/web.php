@@ -79,6 +79,7 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     Route::controller(Controlador_pagarCuotas::class)->group(function () {
 
         Route::resource('/pagarCuotas', Controlador_pagarCuotas::class);
+        Route::post('/PagarCuotasDonacion','PagarCuotasDonacion')->name('cuota.pagarDonacion');
     });
 
 

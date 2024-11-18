@@ -2,12 +2,33 @@ import { mensajeAlerta } from '../../../funciones_helper/notificaciones/mensajes
 import { crud } from '../../../funciones_helper/operaciones_crud/crud.js';
 import { vaciar_errores, vaciar_formulario } from '../../../funciones_helper/vistas/formulario.js';
 
+
+// PAGAR CUOTA
 $('#form_pagarCuotas').submit(function (e) {
+
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+});
+
+
+// PAGAR DONACION
+$('#buton_PagarCuotaDonacion').click(function (e) {
+
+    e.preventDefault();
+    $('#modalDonacion').modal('show');
+
+});
+
+
+$('#btn_nueva_donacion').click(function (e) {
+
+
     e.preventDefault();
 
     Swal.fire({
         title: "NOTA!",
-        text: "¿Está seguro de registrar el pago?",
+        text: "¿Está seguro de realizar el pago?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -18,7 +39,10 @@ $('#form_pagarCuotas').submit(function (e) {
         if (result.isConfirmed) {
 
             let datos = $('#form_pagarCuotas').serialize();
-            crud("admin/pagarCuotas", "POST", null, datos, function (error, response) {
+
+            console.log(datos);
+
+            crud("admin/PagarCuotasDonacion", "POST", null, datos, function (error, response) {
 
                 // console.log(response);
                 // Verificamos que no haya un error o que todos los campos sean llenados
@@ -40,7 +64,7 @@ $('#form_pagarCuotas').submit(function (e) {
 
             })
         } else {
-            alerta_top('error', 'Se canceló el registro de pago');
+            alerta_top('error', 'Se canceló el pago');
         }
     })
 });
@@ -48,11 +72,10 @@ $('#form_pagarCuotas').submit(function (e) {
 
 
 
+
 // BUSCAR ESTUDIANTE POR CI
 $('#ci_estudiante').keyup(function () {
     let ci_estudiante = $(this).val(); // Captura el valor actual del campo de entrada
-
-
     if (ci_estudiante.length < 6) {
 
         $("#buton_PagarCuota").prop("disabled", true);
@@ -95,7 +118,7 @@ $('#ci_estudiante').keyup(function () {
 
         });
 
-        let nombreCompleto= response.mensaje.estudiante.nombres+" "+response.mensaje.estudiante.paterno+" "+response.mensaje.estudiante.materno;
+        let nombreCompleto = response.mensaje.estudiante.nombres + " " + response.mensaje.estudiante.paterno + " " + response.mensaje.estudiante.materno;
         $('#nombre_apellido_res').text(nombreCompleto);
         $('#mesesPagados').html(elemento);
 
@@ -103,11 +126,12 @@ $('#ci_estudiante').keyup(function () {
 });
 
 
-
-
-
+// MARCAR DESMARCAR CHECK
 $('#select_all').on('change', function () {
     // Cambia el estado de todos los checkboxes dentro de #form_rol
     $('#form_pagarCuotas input[type="checkbox"]').prop('checked', this.checked);
 });
+
+
+
 

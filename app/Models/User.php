@@ -97,6 +97,10 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Departamento');
     }
 
+    public function pagos_donacion()
+    {
+        return $this->hasMany('App\Models\PagoDonacion', 'id_usuario');
+    }
 
 
     //se creo esta realacion para simplificar las consultas
