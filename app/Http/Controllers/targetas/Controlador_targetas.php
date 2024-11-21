@@ -156,12 +156,23 @@ class Controlador_targetas extends Controller
         $tolerancia_parseado = Carbon::parse($tolerancia);
         $anticipo_parseado = Carbon::parse($anticipo);
         $salida_parseada = Carbon::parse($salida);
+
+
         // Si es correcto iria a la entrada
         if ($hora_actual->between($anticipo_parseado, $tolerancia_parseado)) {
 
             return $this->registarEntrada($user_id, $reunion_id, $lector_id, $hora_actual);
         }
 
+
+        // si es correcto ira al atraso
+        if ($hora_actual->between($tolerancia_parseado, $salida_parseada)) {
+
+            return $this->registarAtraso($user_id, $reunion_id, $lector_id, $hora_actual);
+        }
+
+
+         // si es correcto ira ala salida
         if ($hora_actual->greaterThan($salida_parseada)) {
 
             return $this->registarSalida($user_id, $reunion_id, $lector_id, $hora_actual);
@@ -195,6 +206,32 @@ class Controlador_targetas extends Controller
             }
         } else {
             return "Error la entrada ya ah sido registrada";
+        }
+    }
+
+    public function registarAtraso($user_id, $reunion_id, $lector_id, $hora_actual)
+    {
+        $usuario = new User();
+        $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        })->where('id', $reunion_id)->first();
+
+
+        if (!$reunion) {
+            // Intentamos realizar el attach
+            try {
+                $usuario->reuniones()->attach($reunion_id, [
+                    'atraso' => $hora_actual,
+                    'user_id' => $user_id,
+                    'id_lector' => $lector_id,
+                ]);
+
+                return "correcto";
+            } catch (\Exception $e) {
+                return "Error al registrar asistencia: " . $e->getMessage();
+            }
+        } else {
+            return "Error el atraso ya fue registrado";
         }
     }
 

@@ -88,7 +88,7 @@ function listar_reuniones() {
                     className: 'table-td text-end',
                     render: function (data, type, row) {
                         if (row.estado == "activo") {
-                            return ` <div>
+                            return ` <div class="d-flex justify-content-around">
 
                              ${permissions['eliminar'] ?
                                     `
@@ -115,7 +115,7 @@ function listar_reuniones() {
                             </div>`;
                         } else {
                             return `
-                              <div>
+                              <div class="d-flex justify-content-around">
                                 ${permissions['verAsistencia'] ?
                                     ` <a href="lista_asistencia/${row.id}" class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center " data-id="${row.id}">
                                 <i class="fas fa-clipboard-check fs-16"></i>

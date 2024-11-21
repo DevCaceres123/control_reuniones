@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('user_manual')->nullable();
             $table->dateTime('entrada')->nullable();
             $table->dateTime('salida')->nullable();
+            $table->dateTime('atraso')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('reunion_id');
            

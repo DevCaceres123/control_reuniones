@@ -12,9 +12,9 @@
                         </div>
                         <div class="col-auto">
                             @can('reunion.planificacion.crearAsistencia')
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAsistencia">
-                                <i class="fas fa-plus me-1"></i> Nuevo
-                            </button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalAsistencia">
+                                    <i class="fas fa-plus me-1"></i> Nuevo
+                                </button>
                             @endcan
 
                         </div>
@@ -31,6 +31,7 @@
                                             <th>MATERNO</th>
                                             <th>ENTRADA</th>
                                             <th>SALIDA</th>
+                                            <th>ATRASO</th>
                                             <th>ASISTENCIA</th>
 
                                         </tr>
@@ -53,11 +54,19 @@
                                                     @if ($usuarios->id == $item->user_id)
                                                         <td>{{ $item->entrada }}</td>
                                                         <td>{{ $item->salida }}</td>
+                                                        <td>{{ $item->atraso }}</td>
 
                                                         @if ($item->entrada != '' && $item->salida != '')
                                                             <td><span class="badge bg-success fs-5">PRESENTE</span></td>
-                                                        @else
-                                                            <td><span class="badge bg-danger fs-5">OBSERVADO</span></td>
+                                                        @endif
+
+                                                        @if ($item->entrada === null || $item->salida === null)
+                                                            @if ($item->atraso === null)
+                                                                <td><span class="badge bg-danger fs-5">OBSERVADO</span></td>
+                                                            @endif
+                                                        @endif
+                                                        @if ($item->atraso != null)
+                                                            <td><span class="badge bg-info fs-5">ATRASO</span></td>
                                                         @endif
                                                     @endif
                                                 @endforeach

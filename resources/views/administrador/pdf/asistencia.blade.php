@@ -91,6 +91,7 @@
         .totalBoletas {
             width: 100%;
             position: relative;
+            margin-top: 15px;
         }
 
         .totalBoletas .inasitencia {
@@ -104,16 +105,28 @@
         }
 
 
-        .totalBoletas .observados{
+        .totalBoletas .observados {
             position: absolute;
             top: 0;
-            right: 50%;
-            left: 50%;
+            
+            left: 25%;
             margin-top: 20px;
             font-size: 16px;
             font-weight: bold;
             text-align: center
         }
+
+        .totalBoletas .atrasados {
+            position: absolute;
+            top: 0;
+            right: 25%;
+            
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center
+        }
+
         .totalBoletas .asistencia {
             position: absolute;
             top: 0;
@@ -140,7 +153,7 @@
         <!-- Detalles de la reunión -->
         <div class="detalles_reunion">
             <p><b>NOMBRE DE LA REUNIÓN:</b> {{ $reunion->titulo ?? 'N/A' }}</p>
-            <hr>  
+            <hr>
             <p><b>HORA DE INICIO:</b> {{ $reunion->entrada ?? 'N/A' }} | <b>FIN:</b>
                 {{ $reunion->salida ?? 'N/A' }}</p>
         </div>
@@ -153,9 +166,9 @@
                     <th>Nº</th>
                     <th>CI</th>
                     <th>NOMBRE COMPLETO</th>
-
                     <th>ENTRADA</th>
                     <th>SALIDA</th>
+                    <th>ATRASO</th>
                     <th>ESTADO</th>
                 </tr>
             </thead>
@@ -165,10 +178,11 @@
                 $asistencia = 0;
                 $noAsistencia = 0;
                 $observados = 0;
+                $atrasos = 0;
                 ?>
                 @foreach ($asistentes as $index => $registro)
                     <tr>
-                        <td>{{ $count ++ }}</td>
+                        <td>{{ $count++ }}</td>
                         <td>{{ $registro->ci ?? 'N/A' }}</td>
                         <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
                             {{ $registro->materno ?? 'N/A' }}</td>
@@ -176,15 +190,29 @@
                             @if ($registro->id === $item->user_id)
                                 <td>{{ $item->entrada ?? 'N/A' }}</td>
                                 <td>{{ $item->salida ?? 'N/A' }}</td>
+                                <td>{{ $item->atraso ?? 'N/A' }}</td>
                                 @if ($item->entrada != '' && $item->salida != '')
                                     <td>PRESENTE</td>
                                     <?php
                                     $asistencia++;
                                     ?>
-                                @else
-                                    <td>OBSERVADO</td>
+                                @endif
+
+                                @if ($item->entrada === null || $item->salida === null)
+                                    @if ($item->atraso === null)
+                                        {
+                                        <td>OBSERVADO</td>
+                                        <?php
+                                        $observados++;
+                                        ?>
+                                        }
+                                    @endif
+                                @endif
+
+                                @if ($item->atraso != null)
+                                    <td><span class="badge bg-info fs-5">ATRASO</span></td>
                                     <?php
-                                    $observados++;
+                                    $atrasos++;
                                     ?>
                                 @endif
                             @endif
@@ -194,12 +222,13 @@
 
                 @foreach ($noAsistentes as $index => $registro)
                     <tr>
-                        <td>{{ $count ++ }}</td>
+                        <td>{{ $count++ }}</td>
                         <td>{{ $registro->ci ?? 'N/A' }}</td>
                         <td>{{ $registro->nombres ?? 'N/A' }} {{ $registro->paterno ?? 'N/A' }}
                             {{ $registro->materno ?? 'N/A' }}</td>
                         <td>{{ $registro->entrada ?? 'N/A' }}</td>
                         <td>{{ $registro->salida ?? 'N/A' }}</td>
+                        <td>{{ $registro->atraso ?? 'N/A' }}</td>
                         <td>FALTA</td>
 
                         <?php
@@ -213,9 +242,10 @@
 
 
         <div class="totalBoletas">
-            <p class="inasitencia">TOTAL FALTAS: <b>{{$noAsistencia}}</b></p>
-            <p class="observados">TOTAL OBSERVADOS: <b>{{$observados}}</b></p>
-            <p class="asistencia">TOTAL ASISTENTES: <b>{{$asistencia}}</b></p>
+            <p class="inasitencia">FALTAS: <b>{{ $noAsistencia }}</b></p>
+            <p class="observados">OBSERVADOS: <b>{{ $observados }}</b></p>
+            <p class="atrasados">ATRASOS: <b>{{ $atrasos }}</b></p>
+            <p class="asistencia">ASISTENTES: <b>{{ $asistencia }}</b></p>
         </div>
     </div>
 </body>

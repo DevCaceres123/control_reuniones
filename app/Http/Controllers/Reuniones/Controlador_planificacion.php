@@ -201,7 +201,7 @@ class Controlador_planificacion extends Controller
 
         $entradaSalidas = DB::table('user_reunion')
             ->where('reunion_id', $reunion_id)
-            ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
+            ->select('salida', 'user_id', 'entrada','atraso') // Selecciona los campos que necesitas
             ->get(); // Cambia first() por get()
 
         $asistenciaReunion = Reunion::whereHas('users')->get();
@@ -257,12 +257,12 @@ class Controlador_planificacion extends Controller
         $asistentes = Reunion::find($reunion_id)->users()->role('estudiante')->get();
 
         // Filtrar los estudiantes que no asistieron
-        $noAsistentes = $estudiantes->diff($asistentes);
+       $noAsistentes = $estudiantes->diff($asistentes);
 
 
         $entradaSalidas = DB::table('user_reunion')
             ->where('reunion_id', $reunion_id)
-            ->select('salida', 'user_id', 'entrada') // Selecciona los campos que necesitas
+            ->select('salida', 'user_id', 'entrada','atraso') // Selecciona los campos que necesitas
             ->get(); // Cambia first() por get()
 
         $pdf = Pdf::loadView('administrador/pdf/asistencia', compact('reunion', 'asistentes', 'noAsistentes', 'entradaSalidas'));

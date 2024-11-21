@@ -25,7 +25,7 @@ $('#ci_estudiante').keyup(function () {
 
     crud("admin/buscar_usuario", "GET", ci_estudiante, null, function (error, response) {
 
-        console.log(response);
+        // console.log(response);
         // Verificamos que no haya un error o que todos los campos sean llenados
         if (response.tipo === "errores") {
 
@@ -51,11 +51,13 @@ $('#ci_estudiante').keyup(function () {
 $('#nueva_asistencia').submit(function (e) {
 
     e.preventDefault();
+    $("#btnUser_asistencia").prop("disabled", true);
     let datosFormulario = $('#nueva_asistencia').serialize();
-    //vaciar_errores("formularioReunion_crear");
+    
    
     crud("admin/nueva_asistencia", "POST", null, datosFormulario, function (error, response) {
-        console.log(response);
+        $("#btnUser_asistencia").prop("disabled", false);
+        // console.log(response);
         // Verificamos que no haya un error o que todos los campos sean llenados
         if (response.tipo == "errores") {
 
