@@ -108,4 +108,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Mes::class, 'pagos', 'id_usuario', 'mes_id'); // Relación a través de pagos
     }
+
+    //pagos con en rol de estudiante
+
+    public function pagosComoEstudiante()
+    {
+        return $this->hasMany(Pago::class, 'estudiante_id');
+    }
+
+     //pagos con en rol de estudiante pero que sea donacion
+
+     public function pagosComoEstudianteDonacion()
+     {
+         return $this->hasMany(PagoDonacion::class, 'estudiante_id');
+     }
+
 }

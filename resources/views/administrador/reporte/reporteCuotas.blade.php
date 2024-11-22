@@ -2,7 +2,7 @@
 @section('titulo', 'reunions')
 @section('contenido')
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-8 col-lg-6">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -20,7 +20,8 @@
                         @endif
                         <div class="card-body">
                             <!-- Contenido para generar reportes de ventas -->
-                            <form id="form_reporteAsistencia" action="{{ route('cuotas.store') }}" method="POST" target="_blank">
+                            <form id="form_reporteAsistencia" action="{{ route('cuotas.store') }}" method="POST"
+                                target="_blank">
                                 @csrf <!-- Token CSRF para proteger el formulario -->
                                 <div class="row">
                                     <div class="form-group py-2 col-12 col-md-12">
@@ -30,12 +31,18 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        <button type="submit" class="btn btn-success px-2 d-inline-flex align-items-center" id="buton_ReporteCuotas" disabled>
-                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte
+                                        <button type="submit" class="btn btn-success px-2 d-inline-flex align-items-center"
+                                            id="buton_ReporteCuotas" disabled>
+                                            <i class="fas fa-calendar-alt fs-20 me-1"></i>Generar reporte
                                         </button>
+
+                                        <a href="{{route('cuotas.final')}}" class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
+                                            id="buton_ReporteCuotas">
+                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte Final
+                                        </a>
                                     </div>
 
-                                  
+
                                 </div>
                             </form>
                         </div>
@@ -43,8 +50,8 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-4">
+
+        <div class="col-12 col-md-4 col-lg-5">
 
             <div class="card p-3">
                 <div class="alert alert-success alert-dismissible fade show p-1" role="alert">
@@ -69,5 +76,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/modulos/reportes/reporteCuotas.js') }}" type="module"></script>
+    <script src="{{ asset('js/modulos/reportes/reporteCuotas.js') }}" type="module"></script>
 @endsection

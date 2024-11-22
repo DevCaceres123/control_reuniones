@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pago extends Model
 {
+
     public function user()
     {
         return $this->belongsTo('App\Models\User','user_pago');
@@ -13,6 +14,14 @@ class Pago extends Model
 
     public function mes(){
         return $this->belongsTo('App\Models\Mes', 'mes_id'); 
+    }
+
+
+    //pagos como estudiante
+
+
+    public function estudiante(){
+        return $this->belongsTo('App\Models\User', 'mes_id'); 
     }
 }
 

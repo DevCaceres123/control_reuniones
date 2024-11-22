@@ -108,5 +108,6 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     Route::controller(Controlador_cuotas::class)->group(function () {
 
         Route::resource('/cuotas', Controlador_cuotas::class);
+        Route::get('/cuotas_reporte_anual', 'cuotas_reporte_anual')->name('cuotas.final');
     });
 });

@@ -8,6 +8,7 @@ use App\Models\Pago;
 use App\Models\PagoDonacion;
 use App\Models\reporte_pago;
 use App\Models\Reporte_pago as ModelsReporte_pago;
+use App\Models\Reporte_pago_final;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -43,62 +44,64 @@ class Controlador_pagarCuotas extends Controller
      */
     public function store(Request $request)
     {
-
         try {
-            if ($request->meses == null) {
-                throw new \Exception("seleccione un mes de pago");
-            }
-            $user = User::select('id', 'ci', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
+        $validatedData = $request->validate([
+            'meses' => 'required|exists:meses,id',
+            'ci_estudiante' => 'required|exists:users,ci',
+        ]);
 
+        $user = User::select('id', 'ci', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
 
-            if (!$user) {
-                throw new \Exception(" estudiante no encontrado");
-            }
-            $mesesPagados = [];
-            foreach ($request->meses as $key => $mes) {
+        $mesesPagados = [];
 
-                $respuesta = $this->verificarPago($user->id, $mes);
+        foreach ($request->meses as $key => $mes) {
 
-                if ($respuesta != "correcto") {
-                    throw new \Exception("ya se registro ese pago");
-                }
-                $respuesta = $this->verificarDonacion($user->id, $mes);
-
-                if ($respuesta != "correcto") {
-                    throw new \Exception("Ya se pago ese mes como donacion");
-                }
-
-                $pago = new Pago();
-                $pago->titulo = "pagado";
-                $pago->fecha_pago = Carbon::now();
-                $pago->monto = "10";
-                $pago->mes_id = $mes;
-                $pago->estudiante_id = $user->id;
-                $pago->id_usuario = auth()->user()->id;
-
-                $mesesPagados[] = Mes::where('id', $mes)->first();
-                $pago->save();
+            $respuesta = $this->verificarPago($user->id, $mes);
+            if ($respuesta != "correcto") {
+                throw new \Exception("ya se registro ese pago");
             }
 
-            $codigo_unico = $this->generarCodigoUnico($pago->id);
+            if ($respuesta != "correcto") {
+            }
+            $respuesta = $this->verificarDonacion($user->id, $mes);
 
-            $data['mesesPagados'] = $mesesPagados;
-            $data['user'] = $user;
-            $data['cod_unico'] = $codigo_unico;
+            if ($respuesta != "correcto") {
+                throw new \Exception("Ya se pago ese mes como donacion");
+            }
+
+            $pago = new Pago();
+            $pago->titulo = "pagado";
+            $pago->fecha_pago = Carbon::now();
+            $pago->monto = "10";
+            $pago->mes_id = $mes;
+            $pago->estudiante_id = $user->id;
+            $pago->id_usuario = auth()->user()->id;
+
+            $mesesPagados[] = Mes::where('id', $mes)->first();
+            $meseActualizar = Mes::where('id', $mes)->first();
+            $this->actualizar_reporte_general_pago($user, $meseActualizar,"normal");
+            $pago->save();
+        }
+
+        $codigo_unico = $this->generarCodigoUnico($pago->id);
+
+        $data['mesesPagados'] = $mesesPagados;
+        $data['user'] = $user;
+        $data['cod_unico'] = $codigo_unico;
 
 
-            $reportePago = new ModelsReporte_pago();
-            $reportePago->codigo_unico = $codigo_unico;
-            $reportePago->reporte_json = json_encode($data);
-            $reportePago->user_id = auth()->user()->id;
+        $reportePago = new ModelsReporte_pago();
+        $reportePago->codigo_unico = $codigo_unico;
+        $reportePago->reporte_json = json_encode($data);
+        $reportePago->user_id = auth()->user()->id;
 
-            $reportePago->save();
-            DB::commit();
+        $reportePago->save();
+        DB::commit();
 
-            $pdf = Pdf::loadView('administrador/pdf/reporteCuotaPagadaEstudiante', $data)
-                ->setPaper([0, 0, 400.8, 400.52]); // Ancho y alto en puntos (p.ej., 420x595 para un tamaño personalizado A5 en puntos)
+        $pdf = Pdf::loadView('administrador/pdf/reporteCuotaPagadaEstudiante', $data)
+            ->setPaper([0, 0, 400.8, 400.52]); // Ancho y alto en puntos (p.ej., 420x595 para un tamaño personalizado A5 en puntos)
 
-            return $pdf->stream();
+        return $pdf->stream();
         } catch (Exception $e) {
             // Revertir los cambios si hay algún error
             DB::rollBack();
@@ -125,15 +128,12 @@ class Controlador_pagarCuotas extends Controller
     public function pagarCuotasDonacion(Request $request)
     {
         try {
-            if ($request->meses == null) {
-                throw new \Exception("seleccione un mes de pago");
-            }
-            $user = User::select('id', 'ci')->where('ci', $request->ci_estudiante)->first();
+            $validatedData = $request->validate([
+                'meses' => 'required|exists:meses,id',
+                'ci_estudiante' => 'required|exists:users,ci',
+            ]);
 
-
-            if (!$user) {
-                throw new \Exception(" estudiante no encontrado");
-            }
+            $user = User::select('id', 'ci', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();
 
             foreach ($request->meses as $key => $mes) {
 
@@ -156,6 +156,8 @@ class Controlador_pagarCuotas extends Controller
                 $pago->mes_id = $mes;
                 $pago->estudiante_id = $user->id;
                 $pago->id_usuario = auth()->user()->id;
+                $meseActualizar = Mes::where('id', $mes)->first();
+                $this->actualizar_reporte_general_pago($user, $meseActualizar,"donacion");
                 $pago->save();
             }
 
@@ -212,6 +214,33 @@ class Controlador_pagarCuotas extends Controller
     }
 
 
+    public function actualizar_reporte_general_pago($estudiate, $mes_pagado,$tipo)
+    {
+        $anio_actual = Carbon::now()->year;
+        $mes = $mes_pagado->mes;
+        $mes_de_pago = Reporte_pago_final::where('estudiante_id', $estudiate->id)
+
+            ->where('anio', $anio_actual)->first();
+
+        if (!$mes_de_pago) {
+            
+            $reporte = new Reporte_pago_final();
+            $reporte->nombre_completo = $estudiate->nombres . " " . $estudiate->paterno . " " . $estudiate->materno;
+            $reporte->total = 10;
+            $reporte->tipo = $tipo;
+            $reporte->estudiante_id = $estudiate->id;
+            $reporte->anio = $anio_actual;
+            $reporte->$mes =  $tipo." ".$mes_pagado->id;
+            $reporte->save();
+        } else {
+
+            
+            $mes_de_pago->$mes = $tipo." ".$mes_pagado->id;
+            $mes_de_pago->total = $mes_de_pago->total + 10;
+
+            $mes_de_pago->save();
+        }
+    }
 
     /**
      * Display the specified resource.

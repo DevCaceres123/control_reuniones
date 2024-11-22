@@ -16,4 +16,8 @@ class PagoDonacion extends Model
     {
         return $this->belongsTo('App\Models\Mes', 'mes_id');
     }
+
+    public function estudiante(){
+        return $this->belongsTo('App\Models\User', 'mes_id'); 
+    }
 }
