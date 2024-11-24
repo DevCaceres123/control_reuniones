@@ -39,11 +39,11 @@ $('#btn_nueva_donacion').click(function (e) {
         if (result.isConfirmed) {
 
             let datos = $('#form_pagarCuotas').serialize();
-
-            console.log(datos);
+            $("#btn_nueva_donacion").prop("disabled", true);
+            // console.log(datos);
 
             crud("admin/PagarCuotasDonacion", "POST", null, datos, function (error, response) {
-
+                $("#btn_nueva_donacion").prop("disabled", false);
                 // console.log(response);
                 // Verificamos que no haya un error o que todos los campos sean llenados
                 if (response.tipo === "errores") {
@@ -55,13 +55,12 @@ $('#btn_nueva_donacion').click(function (e) {
                     mensajeAlerta(response.mensaje, response.tipo);
                     return;
                 }
-
+                $('#modalDonacion').modal('hide');
                 // si todo esta correcto muestra el mensaje de correcto
                 mensajeAlerta(response.mensaje, response.tipo);
                 setTimeout(() => {
                     location.reload();
                 }, 1500);
-
             })
         } else {
             alerta_top('error', 'Se canceló el pago');

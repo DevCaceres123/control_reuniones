@@ -131,6 +131,7 @@ class Controlador_pagarCuotas extends Controller
             $validatedData = $request->validate([
                 'meses' => 'required|exists:meses,id',
                 'ci_estudiante' => 'required|exists:users,ci',
+                'descripcion'=>'required|min:5|max:100'
             ]);
 
             $user = User::select('id', 'ci', 'nombres', 'paterno', 'materno')->where('ci', $request->ci_estudiante)->first();

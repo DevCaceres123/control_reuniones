@@ -20,7 +20,6 @@
                     <h4 class="card-title mt-1">
                         <span class="badge bg-danger fs-5">PAGAR CUOTAS</span>
                     </h4>
-
                     <!-- Columna para el monto -->
                     <div class="col-md-3 position-absolute end-0 top-0 ">
                         <p class="p-2 bg-secondary text-white "><strong>10 Bs</strong></p>
@@ -136,8 +135,6 @@
                     <button type="button" class="btn btn-success rounded btn-sm" id="btn_nueva_donacion"><i
                             class="ri-save-3-line me-1 align-middle"></i> Guardar</button>
                 </div>
-
-
                 </form>
             </div>
         </div>
@@ -146,7 +143,5 @@
 @endsection
 
 @section('scripts')
-
-
     <script src="{{ asset('js/modulos/pagos/pagarCuotas.js') }}" type="module"></script>
 @endsection
