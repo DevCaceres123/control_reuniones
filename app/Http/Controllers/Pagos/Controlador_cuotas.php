@@ -12,9 +12,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Dompdf\Dompdf;
-use Illuminate\Support\Facades\Storage;
-
 use PhpParser\Node\Stmt\Return_;
 
 class Controlador_cuotas extends Controller
@@ -115,9 +112,7 @@ class Controlador_cuotas extends Controller
     {
 
         $anio_actual = Carbon::now()->year;
-        $logoPath = public_path('assets/logo.jpg');
-        $logo = file_get_contents($logoPath);
-        $logoBase64 = base64_encode($logo);
+
         try {
             $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->role('estudiante')->get();
             $estudiantesCuotasPagadas = Reporte_pago_final::select(
@@ -142,9 +137,9 @@ class Controlador_cuotas extends Controller
                 ->get();
 
             //se calculan las donaciones y pagos normales
+            
 
-
-            $pagos_normales_donacion = $this->calcular_pagos_normales_donaciones();
+            $pagos_normales_donacion=$this->calcular_pagos_normales_donaciones();
             // Obtener los IDs de estudiantes que tienen cuotas pagadas
             $idsEstudiantesConCuotas = $estudiantesCuotasPagadas->pluck('estudiante_id');
 
@@ -167,37 +162,8 @@ class Controlador_cuotas extends Controller
             $user = auth()->user()->only(['id', 'nombres', 'paterno', 'materno']);
             $user['rol'] = auth()->user()->getRoleNames()->first();
 
-
-
-
-            $dompdf = new Dompdf();
-
-            // Contenido del PDF
-            $html = view(
-                'administrador/pdf/reporteCuotasFinal',
-                [
-                    'estudiantesCuotasPagadas' => $estudiantesCuotasPagadas,
-                    'estudiantesSinCuotas' => $estudiantesSinCuotas,
-                    'user' => $user,
-                    'pagos_normales_donacion' => $pagos_normales_donacion,
-                    'logoBase64' => $logoBase64,
-                ]
-            )->render();
-            $dompdf->loadHtml($html);
-
-            // Opcional: Configuración del tamaño de papel y orientación
-            $dompdf->setPaper('A4', 'portrait');
-
-            // Generar el PDF
-            $dompdf->render();
-
-            // Convertir el PDF a base64 para enviar en la respuesta
-            // Obtener el PDF en bruto
-            $pdfOutput = $dompdf->output();
-
-            // Devolver el archivo PDF como respuesta con el tipo de contenido adecuado
-            return response($pdfOutput, 200)
-                ->header('Content-Type', 'application/pdf');
+            $pdf = Pdf::loadView('administrador/pdf/reporteCuotasFinal', compact('estudiantesCuotasPagadas', 'estudiantesSinCuotas', 'user','pagos_normales_donacion'));
+            return $pdf->stream();
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['ci_estudiante' => $e->getMessage()]);
         }
@@ -239,8 +205,8 @@ class Controlador_cuotas extends Controller
 
         // Resultado como un array
         $resultadoArray = [
-            'total_normal' => $totales->total_normal * 10,
-            'total_donacion' => $totales->total_donacion * 10,
+            'total_normal' => $totales->total_normal*10,
+            'total_donacion' => $totales->total_donacion*10,
         ];
 
         // Imprimir resultados
@@ -255,4 +221,100 @@ class Controlador_cuotas extends Controller
             'mensaje' => $mensaje
         ];
     }
+
+
+
+     // REPORTE PARA GENERAR ASYNCRONO
+
+    //  public function cuotas_reporte_anual()
+    //  {
+ 
+    //      $anio_actual = Carbon::now()->year;
+    //      $logoPath = public_path('assets/logo.jpg');
+    //      $logo = file_get_contents($logoPath);
+    //      $logoBase64 = base64_encode($logo);
+    //      try {
+    //          $user_estudiante = User::select('id', 'nombres', 'paterno', 'materno')->role('estudiante')->get();
+    //          $estudiantesCuotasPagadas = Reporte_pago_final::select(
+    //              'estudiante_id',
+    //              'nombre_completo',
+    //              'total',
+    //              'tipo',
+    //              'enero',
+    //              'febrero',
+    //              'marzo',
+    //              'abril',
+    //              'mayo',
+    //              'junio',
+    //              'julio',
+    //              'agosto',
+    //              'septiembre',
+    //              'octubre',
+    //              'noviembre',
+    //              'diciembre'
+    //          )
+    //              ->where('anio', $anio_actual)
+    //              ->get();
+ 
+    //          //se calculan las donaciones y pagos normales
+ 
+ 
+    //          $pagos_normales_donacion = $this->calcular_pagos_normales_donaciones();
+    //          // Obtener los IDs de estudiantes que tienen cuotas pagadas
+    //          $idsEstudiantesConCuotas = $estudiantesCuotasPagadas->pluck('estudiante_id');
+ 
+    //          // Filtrar a los estudiantes que no están en la lista de cuotas pagadas
+    //          $estudiantesSinCuotas = $user_estudiante->filter(function ($estudiante) use ($idsEstudiantesConCuotas) {
+    //              return !$idsEstudiantesConCuotas->contains($estudiante->id);
+    //          });
+ 
+    //          // convertimos el json en array
+    //          $estudiantesSinCuotas = json_decode($estudiantesSinCuotas, true);
+ 
+    //          // reordenamos los indices desde 0
+    //          $estudiantesSinCuotas = array_values($estudiantesSinCuotas);
+ 
+    //          // $estudiante_pagos_mes= User::select('nombres','paterno','materno')->get();
+    //          // Imprimir el resultado
+ 
+ 
+    //          // obtener datos del usaurio que genra el reporte
+    //          $user = auth()->user()->only(['id', 'nombres', 'paterno', 'materno']);
+    //          $user['rol'] = auth()->user()->getRoleNames()->first();
+ 
+ 
+ 
+ 
+    //          $dompdf = new Dompdf();
+ 
+    //          // Contenido del PDF
+    //          $html = view(
+    //              'administrador/pdf/reporteCuotasFinal',
+    //              [
+    //                  'estudiantesCuotasPagadas' => $estudiantesCuotasPagadas,
+    //                  'estudiantesSinCuotas' => $estudiantesSinCuotas,
+    //                  'user' => $user,
+    //                  'pagos_normales_donacion' => $pagos_normales_donacion,
+    //                  'logoBase64' => $logoBase64,
+    //              ]
+    //          )->render();
+    //          $dompdf->loadHtml($html);
+ 
+    //          // Opcional: Configuración del tamaño de papel y orientación
+    //          $dompdf->setPaper('A4', 'portrait');
+ 
+    //          // Generar el PDF
+    //          $dompdf->render();
+ 
+    //          // Convertir el PDF a base64 para enviar en la respuesta
+    //          // Obtener el PDF en bruto
+    //          $pdfOutput = $dompdf->output();
+ 
+    //          // Devolver el archivo PDF como respuesta con el tipo de contenido adecuado
+    //          return response($pdfOutput, 200)
+    //              ->header('Content-Type', 'application/pdf');
+    //      } catch (Exception $e) {
+    //          return redirect()->back()->withErrors(['ci_estudiante' => $e->getMessage()]);
+    //      }
+    //  }
 }

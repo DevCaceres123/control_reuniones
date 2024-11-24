@@ -36,34 +36,27 @@ $('#ci_estudiante').keyup(function () {
 
 $('#buton_ReporteCuotasFinal').click(function (e) {
    
+    Swal.fire({
+        title: "¿Quieres generar el reporte final?",
+        text: "Se mostrara el reporte de todos los estudiantes que pagaron!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, generar reporte!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $("#buton_ReporteCuotasFinal").prop("disabled", true);
+  
+            // Llamada a la función crud para hacer la solicitud
+            window.open('cuotas_reporte_anual', '_blank');
+            setTimeout(() => {
+                $("#buton_ReporteCuotasFinal").prop("disabled", false);
+            }, 2500);
+        }
+      });
    
-    $("#buton_ReporteCuotasFinal").prop("disabled", true);
-   temporizadorMensaje();
-    // Llamada a la función crud para hacer la solicitud
-    crud("admin/cuotas_reporte_anual", "GET", null, null, function (error, response) {
-        // Verificar si hay un error
-        $("#buton_ReporteCuotasFinal").prop("disabled", false);
-        console.log(response);
-        if (error) {
-            console.error('Error en la solicitud:', error);
-            return;
-        }
 
-        if (response instanceof Blob) {
-            const pdfUrl = URL.createObjectURL(response);
-
-            // Abrir el PDF en una nueva pestaña
-            const nuevaPestana = window.open(pdfUrl, '_blank');
-            if (nuevaPestana) {
-                nuevaPestana.focus();
-            } else {
-                console.error('No se pudo abrir una nueva pestaña.');
-            }
-        } else {
-            // Aquí manejas otras respuestas JSON si las hay
-            console.log('Respuesta JSON:', response);
-        }
-    });
 });
 
 
@@ -93,3 +86,39 @@ function temporizadorMensaje() {
        
     });
 }
+
+
+
+// Se genera un reporte en el servidor
+
+// $('#buton_ReporteCuotasFinal').click(function (e) {
+   
+   
+//     $("#buton_ReporteCuotasFinal").prop("disabled", true);
+//    temporizadorMensaje();
+//     // Llamada a la función crud para hacer la solicitud
+//     crud("admin/cuotas_reporte_anual", "GET", null, null, function (error, response) {
+//         // Verificar si hay un error
+//         $("#buton_ReporteCuotasFinal").prop("disabled", false);
+//         console.log(response);
+//         if (error) {
+//             console.error('Error en la solicitud:', error);
+//             return;
+//         }
+
+//         if (response instanceof Blob) {
+//             const pdfUrl = URL.createObjectURL(response);
+
+//             // Abrir el PDF en una nueva pestaña
+//             const nuevaPestana = window.open(pdfUrl, '_blank');
+//             if (nuevaPestana) {
+//                 nuevaPestana.focus();
+//             } else {
+//                 console.error('No se pudo abrir una nueva pestaña.');
+//             }
+//         } else {
+//             // Aquí manejas otras respuestas JSON si las hay
+//             console.log('Respuesta JSON:', response);
+//         }
+//     });
+// });

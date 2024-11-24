@@ -36,12 +36,13 @@
                                             <i class="fas fa-calendar-alt fs-20 me-1"></i>Generar reporte
                                         </button>
 
-                                        <button type="button"
-                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
+                                        <button type="button" class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
                                             id="buton_ReporteCuotasFinal">
                                             <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte Final
                                         </button>
                                     </div>
+
+
                                 </div>
                             </form>
                         </div>

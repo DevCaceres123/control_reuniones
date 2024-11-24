@@ -233,7 +233,7 @@
             <p><b>CELULAR:</b> 69750589</p>
             <p>Zona: Playa Verde del distrito 7 de la Ciudad de El Alto</p>
             <p>FECHA REPORTE: {{ now()->format('d-m-Y') }}</p>
-            <img src="data:image/jpeg;base64,{{ $logoBase64 }}" alt="Logo" width="90" height="95">
+            <img src="assets/logo.jpg" alt="Logo" width="90" height="95">
         </div>
 
         <!-- Detalles de la reunión -->
