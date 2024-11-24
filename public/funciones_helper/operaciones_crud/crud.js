@@ -16,14 +16,14 @@ export async function crud(url, metodo, idRegistro = null, datos = null, callbac
                     'Content-Type': 'application/json',
                     "X-CSRF-TOKEN": csrfToken  // Añadir el token CSRF aquí
                 },
-                body:JSON.stringify(datos),
+                body: JSON.stringify(datos),
             });
 
         }
 
         // CUANDO SE REALIZA UN POST
         if (datos != null && idRegistro == null) {
-           
+
             // console.log(datos);
             response = await fetch(`/${url}`, {
                 method: metodo, // or 'PUT'
@@ -35,7 +35,7 @@ export async function crud(url, metodo, idRegistro = null, datos = null, callbac
             });
         }
 
-         // CUANDO SE REALIZA UN GET
+        // CUANDO SE REALIZA UN GET
         if (idRegistro != null && datos == null) {
 
             response = await fetch(`/${url}/${idRegistro}`, {
@@ -47,7 +47,7 @@ export async function crud(url, metodo, idRegistro = null, datos = null, callbac
             });
         }
 
-         // CUANDO SE REALIZA GET A INDEX
+        // CUANDO SE REALIZA GET A INDEX
         if (datos == null && idRegistro == null) {
             // console.log("entro sin datos");
             response = await fetch(`/${url}`, {
@@ -64,10 +64,18 @@ export async function crud(url, metodo, idRegistro = null, datos = null, callbac
         if (!response.ok && response.status != "422") {
             throw new Error(`Ocurrio algun error: ${response.status}`);
         }
-        const respuestaParseada = await response.json();
+        const contentType = response.headers.get('Content-Type');
+        if (contentType && contentType.startsWith('application/pdf')) {
+            // Si la respuesta es un PDF, lo manejamos como un Blob
+            const pdfBlob = await response.blob();
 
-        // console.log(respuestaParseada);
-        callback(null, respuestaParseada);
+            // Llamamos al callback con el PDF Blob
+            callback(null, pdfBlob);
+        } else {
+            // Si la respuesta es JSON, la parseamos
+            const respuestaParseada = await response.json();
+            callback(null, respuestaParseada);
+        }
 
 
     } catch (error) {

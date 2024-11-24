@@ -36,13 +36,12 @@
                                             <i class="fas fa-calendar-alt fs-20 me-1"></i>Generar reporte
                                         </button>
 
-                                        <a href="{{route('cuotas.final')}}" class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
-                                            id="buton_ReporteCuotas">
+                                        <button type="button"
+                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
+                                            id="buton_ReporteCuotasFinal">
                                             <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte Final
-                                        </a>
+                                        </button>
                                     </div>
-
-
                                 </div>
                             </form>
                         </div>
