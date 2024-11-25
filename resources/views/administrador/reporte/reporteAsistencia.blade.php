@@ -40,11 +40,22 @@
                                         <input type="date" class="form-control" id="fecha_final" name="fecha_final"
                                             required>
                                     </div>
-                                    <div class="mt-2">
-                                        <button type="submit" class="btn btn-success  px-2 d-inline-flex align-items-center" disabled
-                                            id="buton_ReporteAsistencia"><i class="far fa-file-pdf fs-20 me-1"></i>Generar
+                                    <div class="mt-2 ">
+                                        <button type="submit"
+                                            class="btn btn-success  px-2 d-inline-flex align-items-center" disabled
+                                            id="buton_ReporteAsistencia">
+                                            <i class="far fa-file-pdf fs-20 me-1">
+                                            </i>Generar
                                             reporte</button>
+
+                                        <button type="button"
+                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
+                                            id="buton_ReporteAsistenciaFinal">
+                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
+                                        </button>
+
                                     </div>
+
                                 </div>
                             </form>
 

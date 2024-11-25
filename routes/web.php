@@ -101,6 +101,8 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
 
         Route::resource('/asistencias', Controlador_asistencia::class);
         Route::post('/reporte_asistencia', 'reporte_asistencia')->name('asistencia.reporte_asistencia');
+
+        Route::get('/reporte_asistencia_final', 'reporte_asistencia_final')->name('asistencia.reporte_asistencia_final');
     });
 
     // cuotas    

@@ -38,7 +38,7 @@
 
                                         <button type="button" class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
                                             id="buton_ReporteCuotasFinal">
-                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte Final
+                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
                                         </button>
                                     </div>
 
