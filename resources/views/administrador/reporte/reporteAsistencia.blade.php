@@ -48,11 +48,10 @@
                                             </i>Generar
                                             reporte</button>
 
-                                        <button type="button"
-                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center"
-                                            id="buton_ReporteAsistenciaFinal">
+                                        <a href="{{ route('asistencia.reporte_asistencia_final') }}" target="_blank"
+                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center">
                                             <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
-                                        </button>
+                                        </a>
 
                                     </div>
 

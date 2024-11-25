@@ -34,30 +34,30 @@ $('#ci_estudiante').keyup(function () {
     })
 });
 
-$('#buton_ReporteCuotasFinal').click(function (e) {
+// $('#buton_ReporteCuotasFinal').click(function (e) {
    
-    Swal.fire({
-        title: "¿Quieres generar el reporte final?",
-        text: "Se mostrara el reporte de todos los estudiantes que pagaron!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, generar reporte!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-            $("#buton_ReporteCuotasFinal").prop("disabled", true);
+//     Swal.fire({
+//         title: "¿Quieres generar el reporte final?",
+//         text: "Se mostrara el reporte de todos los estudiantes que pagaron!",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Si, generar reporte!"
+//       }).then((result) => {
+//         if (result.isConfirmed) {
+//             $("#buton_ReporteCuotasFinal").prop("disabled", true);
   
-            // Llamada a la función crud para hacer la solicitud
-            window.open('cuotas_reporte_anual', '_blank');
-            setTimeout(() => {
-                $("#buton_ReporteCuotasFinal").prop("disabled", false);
-            }, 2500);
-        }
-      });
+//             // Llamada a la función crud para hacer la solicitud
+//             window.open('cuotas_reporte_anual', '_blank');
+//             setTimeout(() => {
+//                 $("#buton_ReporteCuotasFinal").prop("disabled", false);
+//             }, 2500);
+//         }
+//       });
    
 
-});
+// });
 
 
 

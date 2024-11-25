@@ -36,27 +36,27 @@ $('#ci_estudiante').keyup(function () {
 
 
 
-$('#buton_ReporteAsistenciaFinal').click(function (e) {
+// $('#buton_ReporteAsistenciaFinal').click(function (e) {
    
-    Swal.fire({
-        title: "¿Quieres generar el reporte final?",
-        text: "Se mostrara la asistencia de todos los estudiantes!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, generar reporte!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-            $("#reporte_asistencia_final").prop("disabled", true);
+//     Swal.fire({
+//         title: "¿Quieres generar el reporte final?",
+//         text: "Se mostrara la asistencia de todos los estudiantes!",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Si, generar reporte!"
+//       }).then((result) => {
+//         if (result.isConfirmed) {
+//             $("#reporte_asistencia_final").prop("disabled", true);
   
-            // Llamada a la función crud para hacer la solicitud
-            window.open('reporte_asistencia_final', '_blank');
-            setTimeout(() => {
-                $("#buton_ReporteAsistenciaFinal").prop("disabled", false);
-            }, 2500);
-        }
-      });
+//             // Llamada a la función crud para hacer la solicitud
+//             window.open('reporte_asistencia_final', '_blank');
+//             setTimeout(() => {
+//                 $("#buton_ReporteAsistenciaFinal").prop("disabled", false);
+//             }, 2500);
+//         }
+//       });
    
 
-});
+// });
