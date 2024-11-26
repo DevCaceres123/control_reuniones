@@ -94,6 +94,7 @@
         .totalBoletas {
             width: 100%;
             position: relative;
+            margin-top: 12px;
         }
 
         .totalBoletas .inasitencia {
@@ -149,7 +150,7 @@
 
         </div>
 
-        <h3 class="titulo">ASISTENCIA</h3>
+        <h3 class="titulo">REPORTE DE PAGO</h3>
         <!-- Tabla de asistencia -->
         <table class="tabla">
             <thead>
@@ -164,9 +165,8 @@
             <tbody>
                 <?php
                 $count = 1;
-                $asistencia = 0;
-                $noAsistencia = 0;
-                $observados = 0;
+                $count_sinPagar = 0;
+                $count_pagados = 0;
                 ?>
                 @foreach ($mesesPagados as $mes)
                     <tr>
@@ -175,17 +175,18 @@
                         <td>{{ $mes->mes }}</td>
                         <td>10 <strong>Bs</strong></td>
                         <td>PAGADO</td>
+                        {{ $count_pagados = $count_pagados + 10 }}
                     </tr>
                 @endforeach
 
                 @foreach ($mesesNoPagados as $mes)
                     <tr>
                         <td>{{ $count++ }}</td>
-                       
-                            <td>{{ $mes->mes }}</td>
-                            <td>10 <strong>Bs</strong></td>
-                            <td>SIN PAGAR</td>
-                       
+
+                        <td>{{ $mes->mes }}</td>
+                        <td>10 <strong>Bs</strong></td>
+                        <td>SIN PAGAR</td>
+                        {{ $count_sinPagar = $count_sinPagar + 10 }}
 
 
                     </tr>
@@ -195,11 +196,11 @@
 
 
 
-        {{-- <div class="totalBoletas">
-            <p class="inasitencia">TOTAL FALTAS: <b>{{ $noAsistencia }}</b></p>
-            <p class="observados">TOTAL OBSERVADOS: <b>{{ $observados }}</b></p>
-            <p class="asistencia">TOTAL ASISTENTES: <b>{{ $asistencia }}</b></p>
-        </div> --}}
+        <div class="totalBoletas">
+            <p class="inasitencia">DEUDA: <b>{{ $count_sinPagar }} (Bs)</b></p>
+            
+            <p class="asistencia"> PAGADO: <b>{{ $count_pagados }} (Bs)</b></p>
+        </div>
     </div>
 </body>
 
