@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-startbar="dark" data-bs-theme="light">
+<html lang="es" data-startbar="dark" data-bs-theme="light">
 
 <head>
     <meta charset="utf-8" />
@@ -66,11 +66,11 @@
                         @csrf
                         <h2><strong>Iniciar Session</strong></h2>
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username">Usuario</label>
                             <input type="text" id="usuario" name="usuario">
                         </div>
                         <div class="form-group" style="position: relative">
-                            <label for="password">Password</label>
+                            <label for="password">Contraseña</label>
                             <input type="password" id="password" name="password">
                             <a type="button" onclick="togglePassword()" id="btn_vista"><i
                                     class="fas fa-eye-slash fs-18" id="icono_password"></i></a>
@@ -78,7 +78,7 @@
 
                         <div class="form-group">
                             <label for="captcha">Código de Verificación</label>
-                            <div class="d-flex  align-items-center justify-content-center">
+                            <div class="d-flex  align-items-center justify-content-center mt-1">
                                 <img src="{{ captcha_src() }}" alt="captcha" class="captcha-img">
                                 <a type="button" onclick="refreshCaptcha()"><i
                                         class="fas fa-redo fs-20 ms-3 mt-1 "></i></a>
