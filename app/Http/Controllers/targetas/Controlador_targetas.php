@@ -15,6 +15,7 @@ use Exception;
 
 class Controlador_targetas extends Controller
 {
+    public  $path = 'archivo.txt';
     public function obtenerCodigoTargeta(Request $request)
     {
         if ($request->lector == "" || $request->dato == "") {
@@ -36,13 +37,17 @@ class Controlador_targetas extends Controller
 
             if ($lector->uso == "asistencia") {
 
-                return $this->registrarAsistencia($request->dato, $lector->id);
+
+                $resultado = $this->registrarAsistencia($request->dato, $lector->id);
+                Storage::disk('local')->put($this->path, $resultado);
+                return  $resultado;
             }
 
             if ($lector->uso == "inactivo") {
                 throw new \Exception('Lector no disponible');
             }
         } catch (Exception $e) {
+            Storage::disk('local')->put($this->path, $e->getMessage());
             return "Error " . $e->getMessage();
         }
     }
@@ -61,7 +66,7 @@ class Controlador_targetas extends Controller
     public function guardarDatosRegistro($lector, $cod_targeta)
     {
         DB::beginTransaction();
-      
+
         try {
             $this->verificar_registro_usuario($lector);
             $registroLector = new registro_lector();
@@ -76,6 +81,7 @@ class Controlador_targetas extends Controller
             return "correcto";
         } catch (Exception $e) {
             DB::rollBack();
+            Storage::disk('local')->put($this->path, "error al guardar registro");
             return "error al guardar registro";
         }
     }
@@ -91,7 +97,7 @@ class Controlador_targetas extends Controller
 
             $registros = registro_lector::select('id')->where('user_id', $lector->user_id)->get();
 
-            if ($registros->isEmpty()==false) {
+            if ($registros->isEmpty() == false) {
                 foreach ($registros as $registro) {
                     $registro->delete();
                 }
@@ -101,6 +107,7 @@ class Controlador_targetas extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+            Storage::disk('local')->put($this->path, "ocurrio un problema al eliminar usuarios repetidos");
             return "ocurrio un problema al eliminar usuarios repetidos";
         }
     }
@@ -122,6 +129,7 @@ class Controlador_targetas extends Controller
 
             return $asistencia = $this->validarAsitencia($reunion->tolerancia, $reunion->anticipo, $reunion->salida, $usuario->id, $reunion->id, $lector_id);
         } catch (Exception $e) {
+            Storage::disk('local')->put($this->path,  $e->getMessage());
             return "Error " . $e->getMessage();
         }
     }
@@ -151,12 +159,12 @@ class Controlador_targetas extends Controller
 
     public function validarAsitencia($tolerancia, $anticipo, $salida, $user_id, $reunion_id, $lector_id)
     {
-
-        $hora_actual = Carbon::now();
-        $tolerancia_parseado = Carbon::parse($tolerancia);
+       
+        $hora_actual =Carbon::now()->setTimezone('America/La_Paz');
+         $tolerancia_parseado = Carbon::parse($tolerancia);
         $anticipo_parseado = Carbon::parse($anticipo);
         $salida_parseada = Carbon::parse($salida);
-
+        
 
         // Si es correcto iria a la entrada
         if ($hora_actual->between($anticipo_parseado, $tolerancia_parseado)) {
@@ -164,19 +172,23 @@ class Controlador_targetas extends Controller
             return $this->registarEntrada($user_id, $reunion_id, $lector_id, $hora_actual);
         }
 
+       
+        // si es correcto ira ala salida
+        if ($hora_actual->greaterThan($salida_parseada)) {
 
-        // si es correcto ira al atraso
-        if ($hora_actual->between($tolerancia_parseado, $salida_parseada)) {
+            return $this->registarSalida($user_id, $reunion_id, $lector_id, $hora_actual);
+        }
+
+
+         // si es correcto ira al atraso
+         if ($hora_actual->between($tolerancia_parseado, $salida_parseada)) {
 
             return $this->registarAtraso($user_id, $reunion_id, $lector_id, $hora_actual);
         }
 
 
-         // si es correcto ira ala salida
-        if ($hora_actual->greaterThan($salida_parseada)) {
 
-            return $this->registarSalida($user_id, $reunion_id, $lector_id, $hora_actual);
-        }
+
 
         return "No esta en los parametros de fecha";
     }

@@ -3,7 +3,7 @@
 @section('contenido')
 
     <div class="row ">
-        <div class="col-6">
+        <div class="col-12 col-md-6 col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -40,18 +40,22 @@
                                         <input type="date" class="form-control" id="fecha_final" name="fecha_final"
                                             required>
                                     </div>
-                                    <div class="mt-2 ">
-                                        <button type="submit"
-                                            class="btn btn-success  px-2 d-inline-flex align-items-center" disabled
-                                            id="buton_ReporteAsistencia">
-                                            <i class="far fa-file-pdf fs-20 me-1">
-                                            </i>Generar
-                                            reporte</button>
+                                    <div class="mt-2 row ">
+                                        <div class="col-8 col-md-4">
+                                            <button type="submit"
+                                                class="btn btn-success  px-2 d-inline-flex align-items-center mb-2 " disabled
+                                                id="buton_ReporteAsistencia">
+                                                <i class="far fa-file-pdf fs-20 me-1">
+                                                </i>Generar
+                                                reporte</button>
+                                        </div>
 
-                                        <a href="{{ route('asistencia.reporte_asistencia_final') }}" target="_blank"
-                                            class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center">
-                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
-                                        </a>
+                                        <div class="col-12 col-md-6">
+                                            <a href="{{ route('asistencia.reporte_asistencia_final') }}" target="_blank"
+                                                class="btn btn-primary px-2  d-inline-flex align-items-center">
+                                                <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
+                                            </a>
+                                        </div>
 
                                     </div>
 
@@ -65,7 +69,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-12 col-md-4 col-lg-4">
 
             <div class="card p-3">
                 <div class="alert alert-success alert-dismissible fade show p-1" role="alert">

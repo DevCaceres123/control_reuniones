@@ -14,7 +14,7 @@ use App\Http\Middleware\Autenticados;
 use App\Http\Middleware\No_autenticados;
 use Mews\Captcha\Facades\Captcha;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 
 
 Route::prefix('/')->middleware([No_autenticados::class])->group(function () {
@@ -43,6 +43,24 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
         Route::get('inicio', 'inicio')->name('inicio');
         Route::post('cerrar_session', 'cerrar_session')->name('salir');
     });
+
+    // OBTENER LOS ERRROES DEL LECTOR
+
+    Route::get('/errores_lector', function () {
+        $path = 'archivo.txt';
+
+        // Verificar si el archivo existe
+        if (!Storage::disk('local')->exists($path)) {
+            // Si no existe, crearlo con un contenido predeterminado
+            $content = "Este es el contenido del archivo.";
+            Storage::disk('local')->put($path, $content);
+           
+        } else {
+            // Si el archivo existe, leer su contenido
+          $content = Storage::disk('local')->get($path);
+          return json_encode($content);
+        }
+    })->name('errores.lector');
 
     // PARA EL USUARIO
     Route::controller(Controlador_usuario::class)->group(function () {
@@ -79,7 +97,7 @@ Route::prefix('/admin')->middleware([Autenticados::class])->group(function () {
     Route::controller(Controlador_pagarCuotas::class)->group(function () {
 
         Route::resource('/pagarCuotas', Controlador_pagarCuotas::class);
-        Route::post('/PagarCuotasDonacion','PagarCuotasDonacion')->name('cuota.pagarDonacion');
+        Route::post('/PagarCuotasDonacion', 'PagarCuotasDonacion')->name('cuota.pagarDonacion');
     });
 
 

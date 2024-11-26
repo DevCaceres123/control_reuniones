@@ -30,16 +30,23 @@
                                             id="ci_estudiante" required>
                                     </div>
 
-                                    <div class="mt-2">
-                                        <button type="submit" class="btn btn-success px-2 d-inline-flex align-items-center"
-                                            id="buton_ReporteCuotas" disabled>
-                                            <i class="fas fa-calendar-alt fs-20 me-1"></i>Generar reporte
-                                        </button>
+                                    <div class="mt-2 row">
+                                        <div class="col-8 col-md-4">
+                                            <button type="submit"
+                                                class="btn btn-success px-2 d-inline-flex align-items-center mb-2"
+                                                id="buton_ReporteCuotas" disabled>
+                                                <i class="fas fa-calendar-alt fs-20 me-1"></i>Generar reporte
+                                            </button>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <a href="{{ route('cuotas.final') }}" target="_blank"
+                                                class="btn btn-primary px-2  d-inline-flex align-items-center">
+                                                <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
 
-                                        <a  href="{{route('cuotas.final')}}" target="_blank" class="btn btn-primary px-2 ms-5 d-inline-flex align-items-center">
-                                            <i class="far fa-file-pdf fs-20 me-1"></i>Generar reporte final
-                                        
-                                        </a>
+                                            </a>
+                                        </div>
+
+
                                     </div>
 
 
