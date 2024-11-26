@@ -57,7 +57,7 @@ class User extends Authenticatable
     {
         return new Attribute(
             //set: fn ($value) => mb_strtoupper($value),
-            get: fn($value) => mb_strtoupper($value),
+            get: fn($value) => ucwords($value),
         );
     }
 

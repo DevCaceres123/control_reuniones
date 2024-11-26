@@ -40,7 +40,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($usuarios as $usuario)
+                                        {{-- @foreach ($usuarios as $usuario)
                                             <tr>
                                                 <td>
                                                     1
@@ -148,7 +148,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
 
                                     </tbody>
                                 </table>

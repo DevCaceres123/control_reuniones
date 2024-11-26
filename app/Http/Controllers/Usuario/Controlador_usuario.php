@@ -77,12 +77,12 @@ class Controlador_usuario extends Controller
 
     public function store(UsuarioRequest $request)
     {
-        
+
         DB::beginTransaction();
 
 
         try {
-            $ci=$request->ci.$request->complemento;
+            $ci = $request->ci . $request->complemento;
             $respuesta = User::select('id')->where('ci', $ci)->first();
             if ($respuesta) {
                 throw new \Exception(" ci ya registrado");
@@ -311,10 +311,33 @@ class Controlador_usuario extends Controller
 
         return $datosTargeta;
     }
-    public function listar()
+    public function listar(Request $request)
     {
-        $usuarios = User::with('roles')->get();
 
+        $usuarios = User::with('roles');
+
+
+        // Filtro de búsqueda: Filtra por los campos correctos en la tabla Afiliado
+        if (!empty($request->search['value'])) {
+            $usuarios->where('nombres', 'like', '%' . $request->search['value'] . '%')
+                ->orWhere('paterno', 'like', '%' . $request->search['value'] . '%')
+                ->orWhere('materno', 'like', '%' . $request->search['value'] . '%')
+                ->orWhere('ci', 'like', '%' . $request->search['value'] . '%')
+                ->orWhere('cod_targeta', 'like', '%' . $request->search['value'] . '%');
+        }
+
+
+        // Total de registros antes del filtrado
+        $recordsTotal = User::count();
+        $recordsFilter = $usuarios->count();
+
+        // Paginación y orden
+        $datos_usuarios = $usuarios
+            ->skip($request->start)
+            ->take($request->length)
+            ->get();
+
+        
         $permissions = [
             'desactivar' => auth()->user()->can('admin.usuario.desactivar'),
             'reset' => auth()->user()->can('admin.usuario.reset'),
@@ -323,7 +346,10 @@ class Controlador_usuario extends Controller
 
         ];
         return response()->json([
-            'usuarios' => $usuarios,
+            'draw' => $request->draw,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFilter, // Ajustar si hay filtros
+            'usuarios' => $datos_usuarios,
             'permissions' => $permissions,
         ]);
     }

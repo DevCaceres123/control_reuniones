@@ -2,159 +2,165 @@ import { mensajeAlerta } from '../../../funciones_helper/notificaciones/mensajes
 import { crud } from '../../../funciones_helper/operaciones_crud/crud.js';
 import { vaciar_errores, vaciar_formulario } from '../../../funciones_helper/vistas/formulario.js';
 
-let tablaUser;
+
 
 let ciUsuario = document.getElementById("ci");
 let nombreUsuario = document.getElementById("nombres");
 let complemento = document.getElementById("complemento");
 
+let permissions;
+let table_user;
 
 $(document).ready(function () {
-    tablaUser = $("#table_user").DataTable({
-        processing: true,
-        responsive: true,
-    });
-    // listar_usuarios();
+
+    listar_usuarios();
 });
 
 
 
 function listar_usuarios() {
-    crud("admin/listarUsuarios", "GET", null, null, function (error, respuesta) {
-        if (error != null) {
-            mensajeAlerta(error, "error");
-            return; // Agregar un return para evitar ejecutar el resto si hay un error
-        }
 
-        let usuarios = respuesta.usuarios;
-        let permissions = respuesta.permissions;
+    table_user = $('#table_user').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        ajax: {
+            url: 'listarUsuarios', // Ruta que recibe la solicitud en el servidor
+            type: 'GET', // Método de la solicitud (GET o POST)
+            dataSrc: function (json) {
 
-        $('#table_user').DataTable({
-            responsive: true,
-            data: usuarios,
-            columns: [
-                {
-                    data: null,
-                    className: 'table-td',
-                    render: function (data, type, row, meta) {
-                        return meta.row + 1; // Usar meta.row para obtener el índice de la fila
-                    }
-                },
-                {
-                    data: 'nombres',
-                    className: 'table-td text-uppercase',
-                    render: function (data) {
-                        return `
-                            <img src="/admin_template/images/logos/lang-logo/slack.png"
-                                 alt="" class="rounded-circle thumb-md me-1 d-inline">
-                            ${data}
-                        `;
-                    }
-                },
-                {
-                    data: 'paterno',
-                    className: 'table-td',
-                    render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    data: 'materno',
-                    className: 'table-td',
-                    render: function (data) {
-                        return data;
-                    }
-                },
-                {
-                    data: null,
-                    className: 'table-td',
-                    render: function (data, type, row) {
+                permissions = json.permissions;
+                // console.log(permisosGlobal); // Guardar los permisos para usarlos en las columnas
+                return json.usuarios; // Data que se pasará al DataTable
+            }
+        },
+        columns: [
+            {
+                data: null,
+                className: 'table-td',
+                render: function (data, type, row, meta) {
+                    // Calcula el índice global usando el start actual
+                    let start = $('#table_user').DataTable().page.info().start;
+                    return start + meta.row + 1;
+                }
+            },
+            {
+                data: 'nombres',
+                className: 'table-td',
+                render: function (data) {
+                    return `
+                       
+                        ${data}
+                    `;
+                }
+            },
+            {
+                data: 'paterno',
+                className: 'table-td',
+                render: function (data) {
+                    return data;
+                }
+            },
+            {
+                data: 'materno',
+                className: 'table-td',
+                render: function (data) {
+                    return data;
+                }
+            },
+            {
+                data: null,
+                className: 'table-td',
+                render: function (data, type, row) {
 
-                        return `<b class="text-muted">${row.ci}</b>`;
+                    return `<b class="text-muted">${row.ci}</b>`;
 
-                    }
-                },
-                {
-                    data: 'roles',
-                    render: function (data) {
-                        if (data.length != 0) {
-                            return data.map(role =>
-                                `<span class="badge bg-success fs-5">${role.name}</span>`
-                            ).join(' ');
-                        } else {
-                            return `<span class="badge bg-success fs-5">Sin roles asignados</span>`;
-                        }
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        let estadoChecked = row.estado === "activo" ? 'checked' : '';
-
-                        // Aquí verificamos el permiso de desactivar
-                        let desactivarContent = permissions['desactivar'] ? `
-                            <a class="cambiar_estado_usuario" data-id="${row.id},${row.estado}">
-                                <div class="form-check form-switch ms-3">
-                                    <input class="form-check-input" type="checkbox" 
-                                           ${estadoChecked} style="transform: scale(2.0);">
-                                </div>
-                            </a>` : `
-                           <p>No permitido...<p/>
-                        `;
-
-                        return `
-                            <div data-class="">
-                                ${desactivarContent}
-                            </div>`;
-                    }
-                },
-
-                {
-                    data: 'cod_targeta',
-                    render: function (data) {
-                        return data == null
-                            ? `<span class="badge bg-danger fs-5">Sin asignar</span>`
-                            : `<span class="badge bg-success fs-5">${data}</span>`;
-                    }
-                },
-                {
-                    data: null,
-                    className: 'table-td',
-                    render: function (data, type, row) {
-                        return `
-                            <div class="text-end">
-                                <td>
-                                    <div class="d-flex justify-content-between">
-                                        ${permissions['reset'] ? `
-                                            <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
-                                                <i class="fas fa-redo fs-16"></i>
-                                            </a>
-                                        ` : ''}
-                
-                                        ${permissions['editarRol'] ? `
-                                            <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol" data-id="${row.id}">
-                                                <i class="far fa-edit fs-16"></i>
-                                            </a>
-                                        ` : ''}
-                
-                                        ${permissions['editarTargeta'] && row.roles[0].name === "estudiante" ? `
-                                            <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id="${row.id}">
-                                                <i class="fas fa-id-card fs-16"></i>
-                                            </a>
-                                        ` : ''}
-                                    </div>   
-                                </td>
-                            </div>
-                        `;
+                }
+            },
+            {
+                data: 'roles',
+                render: function (data) {
+                    if (data.length != 0) {
+                        return data.map(role =>
+                            `<span class="badge bg-success fs-5">${role.name}</span>`
+                        ).join(' ');
+                    } else {
+                        return `<span class="badge bg-success fs-5">Sin roles asignados</span>`;
                     }
                 }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    let estadoChecked = row.estado === "activo" ? 'checked' : '';
 
-            ],
-            destroy: true
-        });
+                    // Aquí verificamos el permiso de desactivar
+                    let desactivarContent = permissions['desactivar'] ? `
+                        <a class="cambiar_estado_usuario" data-id="${row.id},${row.estado}">
+                            <div class="form-check form-switch ms-3">
+                                <input class="form-check-input" type="checkbox" 
+                                       ${estadoChecked} style="transform: scale(2.0);">
+                            </div>
+                        </a>` : `
+                       <p>No permitido...<p/>
+                    `;
+
+                    return `
+                        <div data-class="">
+                            ${desactivarContent}
+                        </div>`;
+                }
+            },
+
+            {
+                data: 'cod_targeta',
+                render: function (data) {
+                    return data == null
+                        ? `<span class="badge bg-danger fs-5">Sin asignar</span>`
+                        : `<span class="badge bg-success fs-5">${data}</span>`;
+                }
+            },
+            {
+                data: null,
+                className: 'table-td',
+                render: function (data, type, row) {
+                    return `
+                        <div class="text-end">
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    ${permissions['reset'] ? `
+                                        <a class="btn btn-sm btn-outline-info px-2 d-inline-flex align-items-center resetear_usuario" data-id="${row.id}">
+                                            <i class="fas fa-redo fs-16"></i>
+                                        </a>
+                                    ` : ''}
+            
+                                    ${permissions['editarRol'] ? `
+                                        <a class="btn btn-sm btn-outline-primary px-2 d-inline-flex align-items-center cambiar_rol" data-id="${row.id}">
+                                            <i class="far fa-edit fs-16"></i>
+                                        </a>
+                                    ` : ''}
+            
+                                    ${permissions['editarTargeta'] && row.roles[0].name === "estudiante" ? `
+                                        <a class="btn btn-sm btn-outline-warning px-2 d-inline-flex align-items-center asignar_targeta" data-id="${row.id}">
+                                            <i class="fas fa-id-card fs-16"></i>
+                                        </a>
+                                    ` : ''}
+                                </div>   
+                            </td>
+                        </div>
+                    `;
+                }
+            }
+
+        ],
     });
 }
 
+
+function actualizarTabla() {
+
+    table_user.ajax.reload(null, false); // Recarga los datos sin resetear el paginado
+}
 
 // REGISTRAR  USUARIO
 $('#formularioUsuario').submit(function (e) {
@@ -184,7 +190,7 @@ $('#formularioUsuario').submit(function (e) {
             mensajeAlerta(response.mensaje, response.tipo);
             return;
         }
-        listar_usuarios();
+        actualizarTabla();
         mensajeAlerta(response.mensaje, response.tipo);
         vaciar_formulario("formularioUsuario");
         $('#ModalUsuario').modal('hide');
@@ -244,7 +250,7 @@ $('#table_user').on('click', '.desactivar_usuario', function (e) {
                     return;
                 }
 
-                listar_usuarios();
+                actualizarTabla();
                 mensajeAlerta(response.mensaje, response.tipo);
 
             });
@@ -286,7 +292,7 @@ $('#formEditarRol').submit(function (e) {
         mensajeAlerta(response.mensaje, response.tipo);
 
 
-        listar_usuarios();
+        actualizarTabla();
         vaciar_formulario("formEditarRol");
         $('#ModalRol').modal('hide');
 
@@ -404,7 +410,7 @@ $('#registrtarCodigoTargeta').submit(function (e) {
             return;
         }
 
-        listar_usuarios();
+        actualizarTabla();
         mensajeAlerta(response.mensaje, response.tipo);
         $('#ModalTargeta').modal('hide');
         vaciar_formulario('registrtarCodigoTargeta');
@@ -445,7 +451,7 @@ $('#table_user').on('click', '.cambiar_estado_usuario', function (e) {
 
         mensajeAlerta(response.mensaje, response.tipo);
 
-        listar_usuarios();
+        actualizarTabla();
 
 
 
