@@ -12,7 +12,7 @@ class Reunion extends Model
        
 
         return $this->belongsToMany('App\Models\User', 'user_reunion', 'reunion_id', 'user_id')
-        ->withPivot('id_lector'); // Incluimos el campo extra (id_lectores)
+        ->withPivot('id_lector','atraso'); // Incluimos el campo extra (id_lectores)
 
     }
 

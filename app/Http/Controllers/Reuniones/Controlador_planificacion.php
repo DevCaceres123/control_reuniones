@@ -201,7 +201,7 @@ class Controlador_planificacion extends Controller
 
         $entradaSalidas = DB::table('user_reunion')
             ->where('reunion_id', $reunion_id)
-            ->select('salida', 'user_id', 'entrada','atraso') // Selecciona los campos que necesitas
+            ->select('salida', 'user_id', 'entrada', 'atraso') // Selecciona los campos que necesitas
             ->get(); // Cambia first() por get()
 
         $asistenciaReunion = Reunion::whereHas('users')->get();
@@ -257,12 +257,12 @@ class Controlador_planificacion extends Controller
         $asistentes = Reunion::find($reunion_id)->users()->role('estudiante')->get();
 
         // Filtrar los estudiantes que no asistieron
-       $noAsistentes = $estudiantes->diff($asistentes);
+        $noAsistentes = $estudiantes->diff($asistentes);
 
 
         $entradaSalidas = DB::table('user_reunion')
             ->where('reunion_id', $reunion_id)
-            ->select('salida', 'user_id', 'entrada','atraso') // Selecciona los campos que necesitas
+            ->select('salida', 'user_id', 'entrada', 'atraso') // Selecciona los campos que necesitas
             ->get(); // Cambia first() por get()
 
         $pdf = Pdf::loadView('administrador/pdf/asistencia', compact('reunion', 'asistentes', 'noAsistentes', 'entradaSalidas'));
@@ -292,13 +292,18 @@ class Controlador_planificacion extends Controller
 
         DB::beginTransaction();
         try {
+            $respuesta="";
             if ($request->role == "entrada") {
 
-                $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
+                 $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
             }
             if ($request->role == "salida") {
 
-                $this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
+                $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
+            }
+
+            if($respuesta!= "correcto"){
+                throw new Exception($respuesta);
             }
 
             DB::commit();
@@ -319,7 +324,12 @@ class Controlador_planificacion extends Controller
         try {
             $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
-            })->where('id', $reunion_id)->first();
+            })
+                ->where('id', $reunion_id)
+                ->with('users') // Carga la relación con los datos del pivote
+                ->first();
+
+
 
             if (!$reunion) {
 
@@ -330,6 +340,13 @@ class Controlador_planificacion extends Controller
                     "user_manual" => auth()->user()->id,
                 ]);
             } else {
+
+
+                $atraso= $reunion->users[0]->pivot->atraso;
+                if ($atraso != " " && $tipo_entrada == "entrada") {
+                    throw new Exception('no se puede asignar una entrada el usuario ya cuenta con un atraso');
+                }
+
                 $reunion->users()->updateExistingPivot(
                     $user_id,
                     [
@@ -339,10 +356,12 @@ class Controlador_planificacion extends Controller
                         "user_manual" => auth()->user()->id,
                     ]
                 );
+
+                return "correcto";
             }
         } catch (Exception $e) {
 
-            return "error" . $e->getMessage();
+            return $e->getMessage();
         }
 
         //    $user = User::find($user_id)->reuniones()->where('reunion_id', $reunion_id)->get()

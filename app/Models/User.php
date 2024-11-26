@@ -79,7 +79,7 @@ class User extends Authenticatable
         //return $this->belongsToMany('App\Models\Reunion');
 
         return $this->belongsToMany('App\Models\Reunion', 'user_reunion', 'user_id', 'reunion_id')
-            ->withPivot('id_lector'); // Incluimos el campo extra (id_lectores)
+            ->withPivot('id_lector','atraso'); // Incluimos el campo extra (id_lectores)
     }
 
     public function pagos()
