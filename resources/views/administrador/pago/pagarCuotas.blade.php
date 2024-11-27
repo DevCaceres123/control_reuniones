@@ -32,7 +32,7 @@
                             {{ $errors->first('errores') }}
                         </div>
                     @endif
-                    <form id="form_pagarCuotas" action="{{route('pagarCuotas.store')}}" method="POST" target="_blank">
+                    <form id="form_pagarCuotas" action="{{ route('pagarCuotas.store') }}" method="POST" target="_blank">
                         @csrf <!-- Token CSRF para proteger el formulario -->
                         <div class="">
                             <label for="ci_estudiante" class="form-label">CI ESTUDIANTE</label>
@@ -71,7 +71,8 @@
                                 <i class="far fa-money-bill-alt fs-14 me-1"></i>
                                 Pagar Cuota
                             </button>
-                            <button type="submit" class="btn btn-md btn-outline-danger px-4" id="buton_PagarCuotaDonacion">
+                            <button type="submit" class="btn btn-md btn-outline-danger px-4" id="buton_PagarCuotaDonacion"
+                                disabled>
                                 <i class="fas fa-handshake fs-20 me-1"></i>
 
                             </button>
@@ -112,13 +113,8 @@
                             <div class="form-group py-2 col-md-12">
                                 <label for="" class="form-label">DESCRIPCION</label>
                                 <div>
-
-                                    <div class="form-floating">
-                                        <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Ingrese descripcion de la donacion"
-                                            id="descripcion" maxlength="100">
-                                        </textarea>
-                                        <label for="descripcion">Ingrese descripcion de la donacion</label>
-                                    </div>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" placeholder="Ingrese descripcion de la donacion"
+                                        maxlength="100" ></textarea>
 
                                     <div id="_descripcion"></div>
                                 </div>

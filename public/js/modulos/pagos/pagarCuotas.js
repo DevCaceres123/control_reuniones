@@ -78,6 +78,7 @@ $('#ci_estudiante').keyup(function () {
     if (ci_estudiante.length < 6) {
 
         $("#buton_PagarCuota").prop("disabled", true);
+        $("#buton_PagarCuotaDonacion").prop("disabled", true);
         $('#mesesPagados').html("");
         return;
     }
@@ -95,14 +96,23 @@ $('#ci_estudiante').keyup(function () {
         if (response.tipo != "exito") {
             $('#nombre_apellido_res').text("no encontrado...");
             $("#buton_PagarCuota").prop("disabled", true);
+            $("#buton_PagarCuotaDonacion").prop("disabled", true);
             $('#mesesPagados').html("");
             return;
         }
-
+        $("#buton_PagarCuotaDonacion").prop("disabled", false);
         $("#buton_PagarCuota").prop("disabled", false);
 
 
         let elemento = "";
+        if (response.mensaje.meses.length == 0) {
+
+            console.log("enmtro");
+            $('#mesesPagados').html("<p class='text-center mt-1 text-success'>Todos los meses han sido pagados</p>");
+
+            return;
+        }
+
         response.mensaje.meses.forEach(element => {
             elemento += `
 
