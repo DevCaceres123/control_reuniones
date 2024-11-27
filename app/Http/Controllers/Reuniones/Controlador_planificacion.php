@@ -295,14 +295,14 @@ class Controlador_planificacion extends Controller
             $respuesta="";
             if ($request->role == "entrada") {
 
-                 $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
+              $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "entrada");
             }
             if ($request->role == "salida") {
 
-                $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
+              $respuesta=$this->verificarDatos($request->id_reunion, $request->id_usuarioEstudiante, "salida");
             }
 
-            if($respuesta!= "correcto"){
+            if($respuesta != "correcto"){
                 throw new Exception($respuesta);
             }
 
@@ -322,7 +322,7 @@ class Controlador_planificacion extends Controller
 
         $usuario = new User();
         try {
-            $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
+           $reunion = Reunion::whereHas('users', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
             })
                 ->where('id', $reunion_id)
@@ -331,17 +331,19 @@ class Controlador_planificacion extends Controller
 
 
 
-            if (!$reunion) {
+            if (!$reunion) 
+            {
 
-                $usuario->reuniones()->attach($reunion_id, [
+               
+              $usuario->reuniones()->attach($reunion_id, [
                     'user_id' => $user_id,
                     $tipo_entrada => Carbon::now(),
                     'manual' => $tipo_entrada . " " . "fue insertado manualmente",
                     "user_manual" => auth()->user()->id,
                 ]);
-            } else {
-
-
+            } else 
+            {
+                
                 $atraso= $reunion->users[0]->pivot->atraso;
                 if ($atraso != " " && $tipo_entrada == "entrada") {
                     throw new Exception('no se puede asignar una entrada el usuario ya cuenta con un atraso');
@@ -356,9 +358,9 @@ class Controlador_planificacion extends Controller
                         "user_manual" => auth()->user()->id,
                     ]
                 );
-
-                return "correcto";
             }
+
+            return "correcto";
         } catch (Exception $e) {
 
             return $e->getMessage();
